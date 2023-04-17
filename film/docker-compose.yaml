@@ -1,0 +1,109 @@
+# Achtung: aktuelles docker image für film nicht vergessen!
+# Aufruf:   docker compose up postgres pgadmin film
+#           docker compose down
+
+# Netzwerk "film_default" für die Container durch den Verzeichnisnamen
+
+services:
+
+  # ------------------------------------------------------------------------------------
+  # P o s t g r e S Q L
+  # ------------------------------------------------------------------------------------
+  postgres:
+    image: postgres:15.2-bullseye
+    ports:
+      - published: 5432
+        target: 5432
+    volumes:
+      - type: bind
+        source: ../volumes/postgres/data #C:/Zimmermann/volumes/postgres/data
+        target: /var/lib/postgresql/data
+      - type: bind
+        source: ../volumes/postgres/postgresql.conf #C:/Zimmermann/volumes/postgres/postgresql.conf
+        target: /etc/postgresql/postgresql.conf
+        read_only: true
+      - type: bind
+        source: ../volumes/postgres/tablespace #C:/Zimmermann/volumes/postgres/tablespace
+        target: /var/lib/postgresql/tablespace
+      - type: bind
+        source: ../volumes/postgres/csv/film #C:/Zimmermann/volumes/postgres/csv/film
+        target: /csv
+        read_only: true
+      - type: bind
+        source: ../volumes/postgres/sql #C:/Zimmermann/volumes/postgres/sql
+        target: /sql
+        read_only: true
+    env_file: [ "docker-compose.postgres.env" ]
+    user: "postgres:postgres"
+    security_opt:
+      - label:user:postgres
+      - no-new-privileges:true
+    container_name: postgres
+    hostname: postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+    healthcheck:
+      test:
+        [
+          CMD,
+          pg_isready,
+          --dbname,
+          postgres,
+          --username,
+          postgres
+        ]
+      interval: 5s
+      timeout: 2s
+      start_period: 5s
+
+  # ------------------------------------------------------------------------------------
+  # p g a d m i n
+  # ------------------------------------------------------------------------------------
+  # http://localhost:8888 mit Emailadresse "pgadmin@acme.com" und Passwort "p"
+  pgadmin:
+    image: dpage/pgadmin4:6.21
+    ports:
+      - published: 8888
+        target: 80
+    volumes:
+      - type: bind
+        source: ../volumes/postgres/pgadmin #C:/Zimmermann/volumes/postgres/pgadmin
+        # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+        target: /var/lib/pgadmin
+      - type: bind
+        source: ../volumes/postgres/pgadmin4 #C:/Zimmermann/volumes/postgres/pgadmin4
+        target: /var/lib/pgadmin4
+    env_file: [ "docker-compose.pgadmin.env" ]
+    user: "pgadmin:5050"
+    container_name: pgadmin
+    hostname: pgadmin
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+
+  # ------------------------------------------------------------------------------------
+  # f i l m
+  # ------------------------------------------------------------------------------------
+  
+  film:
+    image: swe-gruppe-1/film:2023.4.0
+    ports:
+      - published: 3000
+        target: 3000
+    volumes:
+      - type: bind
+        source: ../volumes/film #C:/Zimmermann/volumes/film
+        target: /opt/app/log
+    env_file: [ "docker-compose.film.env" ]
+    container_name: film
+    hostname: film
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M
