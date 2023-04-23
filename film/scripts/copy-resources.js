@@ -15,4 +15,14 @@ if (!fs.existsSync(dist)) {
     fs.mkdirSync(dist);
 }
 
-//TODO Add copy actions
+const configSrc = join(src, 'config');
+const configDist = join(dist, src, 'config');
+
+//TODO Add copy actions for db scripts
+
+// PEM-Dateien fuer TLS kopieren
+const tlsPemSrc = join(configSrc, 'tls');
+const tlsPemDist = join(configDist, 'tls');
+mkdirSync(tlsPemDist, { recursive: true });
+copySync(tlsPemSrc, tlsPemDist);
+
