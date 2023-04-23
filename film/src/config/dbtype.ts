@@ -1,8 +1,6 @@
-import { env } from './env.js';
+/**
+ * Das Modul enthält den Namen des DB-Typs: postgres.
+ * @packageDocumentation
+ */
 
-const { DB_TYPE } = env;
-
-export const dbType =
-    DB_TYPE === 'postgres' || DB_TYPE === 'mysql' || DB_TYPE === 'sqlite'
-        ? DB_TYPE
-        : 'postgres';
+export const dbType = 'postgres';
