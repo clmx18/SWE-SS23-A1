@@ -71,5 +71,5 @@ snyk-*.log
 docker-compose.*.env
 
 # Ignore PEM & CER Files
-src/config/*.pem
-src/config/*.cer
+*.pem
+*.cer
