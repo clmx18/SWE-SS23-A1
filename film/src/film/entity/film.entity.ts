@@ -17,7 +17,6 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { Regisseur } from './regisseur.entity.js';
 import { Schauspieler } from './schauspieler.entity.js';
-import { dbType } from '../../config/dbtype.js';
 
 /**
  * Union-Type für die bei Filmen zur Einteilung verfügbaren Genres
@@ -64,13 +63,9 @@ export class Film {
     @JoinTable()
     schauspieler: Schauspieler | undefined;
 
-    @CreateDateColumn({
-        type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
-    })
+    @CreateDateColumn('timestamp')
     readonly erzeugt: Date | undefined;
 
-    @UpdateDateColumn({
-        type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
-    })
+    @UpdateDateColumn('timestamp')
     readonly aktualisiert: Date | undefined;
 }
