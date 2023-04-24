@@ -73,3 +73,6 @@ docker-compose.*.env
 # Ignore PEM & CER Files
 *.pem
 *.cer
+
+# Ignore package-lock.json
+package-lock.json
