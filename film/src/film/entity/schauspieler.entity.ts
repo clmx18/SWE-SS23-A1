@@ -1,4 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+/**
+ * Das Modul enthält die Entity-Klasse 'Schauspieler'
+ * @packageDocumentation
+ */
+import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
@@ -8,6 +12,9 @@ import { ApiProperty } from '@nestjs/swagger';
 export class Schauspieler {
     @PrimaryGeneratedColumn()
     id: number | undefined;
+
+    @VersionColumn()
+    readonly version: number | undefined;
 
     @Column('varchar')
     @ApiProperty({ example: 'Quentin', type: String })
@@ -26,6 +33,6 @@ export class Schauspieler {
     readonly groesse: number | undefined;
 
     @Column('simple-json')
-    @ApiProperty({ example: '{ twitter: @peter1 }', type: JSON })
+    @ApiProperty({ example: { twitter: '@peter1' }, type: JSON })
     readonly sozialeMedien: { twitter: string; instagram: string } | undefined;
 }

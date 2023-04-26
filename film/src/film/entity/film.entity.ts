@@ -21,7 +21,22 @@ import { Schauspieler } from './schauspieler.entity.js';
 /**
  * Union-Type für die bei Filmen zur Einteilung verfügbaren Genres
  */
-export type Genre = 'Action' | 'Adventure' | 'Comedy' | 'Horror';
+export type Genre =
+    | 'Action'
+    | 'Adventure'
+    | 'Animation'
+    | 'Biography'
+    | 'Comedy'
+    | 'Drama'
+    | 'Fantasy'
+    | 'Film-Noir'
+    | 'History'
+    | 'Horror'
+    | 'Mystery'
+    | 'Romance'
+    | 'Sci-Fi'
+    | 'Thriller'
+    | 'Western';
 
 /**
  * Entity-Klasse für das Abbilden von Filmen
@@ -57,10 +72,12 @@ export class Film {
 
     @ManyToOne(() => Regisseur, (regisseur) => regisseur.filme)
     @JoinColumn({ name: 'regisseur_id' })
+    @ApiProperty({ example: 'Regisseur des Films', type: Regisseur })
     regisseur: Regisseur | undefined;
 
     @ManyToMany(() => Schauspieler)
     @JoinTable()
+    @ApiProperty({ example: 'Schauspieler des Films', type: Schauspieler })
     schauspieler: Schauspieler | undefined;
 
     @CreateDateColumn('timestamp')
