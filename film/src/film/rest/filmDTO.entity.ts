@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
+/* eslint-disable max-len, @typescript-eslint/no-magic-numbers */
 /**
  * Das Modul enthält die Entity-Klasse 'FilmDTO'
  * @packageDocumentation
@@ -31,7 +31,9 @@ export class FilmDTO {
     readonly titel: string | undefined;
 
     @MaxLength(32)
-    @Matches(/^Action$|^Adventure$|^Comedy$|^Horror$/u)
+    @Matches(
+        /^Action$|^Adventure$|^Animation$|^Biography$|^Comedy$|^Drama$|^Fantasy$|^Film-Noir$|^History$|^Horror$|^Mystery$|^Romance$|^Sci-Fi$|^Thriller$|^Western'/u,
+    )
     @ApiProperty({ example: 'Comedy', type: String })
     readonly genre: Genre | undefined;
 
@@ -60,4 +62,4 @@ export class FilmDTO {
     @Type(() => SchauspielerDTO)
     schauspieler: SchauspielerDTO[] | undefined;
 }
-/* eslint-enable @typescript-eslint/no-magic-numbers */
+/* eslint-enable max-len, @typescript-eslint/no-magic-numbers */
