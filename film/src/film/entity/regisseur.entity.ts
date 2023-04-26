@@ -1,3 +1,7 @@
+/**
+ * Das Modul enthält die Entity-Klasse 'Regisseur'
+ * @packageDocumentation
+ */
 import {
     Column,
     Entity,
@@ -34,5 +38,6 @@ export class Regisseur {
     @OneToMany(() => Film, (film) => film.regisseur, {
         cascade: ['insert', 'remove'],
     })
+    @ApiProperty({ example: 'Filme des Regisseurs', type: Array<Film> })
     readonly filme: Film[] | undefined;
 }

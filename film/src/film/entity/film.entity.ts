@@ -57,10 +57,12 @@ export class Film {
 
     @ManyToOne(() => Regisseur, (regisseur) => regisseur.filme)
     @JoinColumn({ name: 'regisseur_id' })
+    @ApiProperty({ example: 'Regisseur des Films', type: Regisseur })
     regisseur: Regisseur | undefined;
 
     @ManyToMany(() => Schauspieler)
     @JoinTable()
+    @ApiProperty({ example: 'Schauspieler des Films', type: Schauspieler })
     schauspieler: Schauspieler | undefined;
 
     @CreateDateColumn('timestamp')
