@@ -46,7 +46,7 @@ pipeline {
 
                 // https://www.jenkins.io/doc/pipeline/steps/git
                 // "named arguments" statt Funktionsaufruf mit Klammern
-                git url: 'https://github.com/clmx18/testswe', branch: 'main', poll: true
+                git url: 'https://github.com/clmx18/SWE-SS23-A1', branch: 'main', poll: true
             }
         }
 
