@@ -59,13 +59,7 @@ export interface Links {
 /** Film-Objekt mit HATEOAS-Links */
 export type FilmModel = Omit<
     Film,
-    | 'aktualisiert'
-    | 'erzeugt'
-    | 'id'
-    | 'regisseure'
-    | 'schauspieler'
-    | 'titel'
-    | 'version'
+    'aktualisiert' | 'erzeugt' | 'id' | 'regisseur' | 'schauspieler' | 'version'
 > & {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     _links: Links;
@@ -234,9 +228,7 @@ export class FilmGetController {
         }
 
         // HATEOAS: Atom Links je Film
-        const filmeModel = filme.map((film) =>
-            this.#toModel(film, req, false),
-        );
+        const filmeModel = filme.map((film) => this.#toModel(film, req, false));
         this.#logger.debug('find: filmeModel=%o', filmeModel);
 
         const result: FilmeModel = { _embedded: { filme: filmeModel } };
