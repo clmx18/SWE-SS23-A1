@@ -46,7 +46,7 @@ pipeline {
 
                 // https://www.jenkins.io/doc/pipeline/steps/git
                 // "named arguments" statt Funktionsaufruf mit Klammern
-                git url: 'https://github.com/clmx18/SWE-SS23-A1', branch: 'main', poll: true
+                git url: 'https://github.com/clmx18/testswe', branch: 'main', poll: true
             }
         }
 
@@ -80,7 +80,7 @@ pipeline {
                 // https://computingforgeeks.com/how-to-install-python-on-debian-linux
                 sh 'apt install --no-install-recommends --yes --show-progress python3-minimal'
                 sh 'python3 --version'
-
+                sh 'ls -la'
                 script {
                     if (!fileExists("${env.WORKSPACE}/package.json")) {
                         echo "package.json ist *NICHT* in ${env.WORKSPACE} vorhanden"
@@ -88,8 +88,9 @@ pipeline {
                 }
 
                 // "clean install", Dauer: ca. 5 Minuten
+                sh 'npm i --package-lock-only'
                 sh 'npm ci --omit=dev --no-package-lock --force'
-                sh 'npm r -D ts-jest --no-package-lock --force'
+                //sh 'npm r -D ts-jest --no-package-lock --force'
                 sh 'npm i -D typescript@rc --no-package-lock --force'
                 sh 'npm audit --omit dev fix --force'
                 sh 'npm i -D ts-jest --no-package-lock --force'
@@ -170,14 +171,14 @@ pipeline {
 
                 success {
                     script {
-                        if (fileExists("${env.WORKSPACE}/buch.zip")) {
-                            sh 'rm buch.zip'
+                        if (fileExists("${env.WORKSPACE}/film.zip")) {
+                            sh 'rm film.zip'
                         }
                     }
                     // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
-                    zip zipFile: 'buch.zip', archive: false, dir: 'dist'
+                    zip zipFile: 'film.zip', archive: false, dir: 'dist'
                     // jobs/buch/builds/.../archive/buch.zip
-                    archiveArtifacts 'buch.zip'
+                    archiveArtifacts 'film.zip'
                 }
             }
         }
