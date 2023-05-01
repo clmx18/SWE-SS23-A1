@@ -4,6 +4,7 @@ import {
     type NestModule,
 } from '@nestjs/common';
 import { AuthModule } from './security/auth/auth.module.js';
+import { DevModule } from './config/dev/dev.module.js';
 import { FilmGetController } from './film/rest/film-get.controller.js';
 import { FilmModule } from './film/film.module.js';
 import { HealthModule } from './health/health.module.js';
@@ -14,6 +15,7 @@ import { typeOrmModuleOptions } from './config/db.js';
 
 @Module({
     imports: [
+        DevModule,
         AuthModule,
         FilmModule,
         HealthModule,

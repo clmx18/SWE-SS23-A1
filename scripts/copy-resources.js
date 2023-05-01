@@ -18,7 +18,13 @@ if (!fs.existsSync(dist)) {
 const configSrc = join(src, 'config');
 const configDist = join(dist, src, 'config');
 
-//TODO Add copy actions for db scripts
+// DB-Skripte kopieren
+const devSrc = join(configSrc, 'dev');
+const postgresSrc = join(devSrc, 'postgres');
+const devDist = join(configDist, 'dev');
+const postgresDist = join(devDist, 'postgres');
+mkdirSync(postgresDist, { recursive: true });
+copySync(postgresSrc, postgresDist);
 
 // PEM-Dateien fuer TLS kopieren
 const tlsPemSrc = join(configSrc, 'tls');

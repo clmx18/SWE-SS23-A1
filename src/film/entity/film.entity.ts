@@ -22,21 +22,22 @@ import { Schauspieler } from './schauspieler.entity.js';
  * Union-Type für die bei Filmen zur Einteilung verfügbaren Genres
  */
 export type Genre =
-    | 'Action'
-    | 'Adventure'
-    | 'Animation'
-    | 'Biography'
-    | 'Comedy'
-    | 'Drama'
-    | 'Fantasy'
-    | 'Film-Noir'
-    | 'History'
-    | 'Horror'
-    | 'Mystery'
-    | 'Romance'
-    | 'Sci-Fi'
-    | 'Thriller'
-    | 'Western';
+    | 'ACTION'
+    | 'ADVENTURE'
+    | 'ANIMATION'
+    | 'BIOGRAPHY'
+    | 'COMEDY'
+    | 'CRIME'
+    | 'DRAMA'
+    | 'FANTASY'
+    | 'FILM-NOIR'
+    | 'HISTORY'
+    | 'HORROR'
+    | 'MYSTERY'
+    | 'ROMANCE'
+    | 'SCI-FI'
+    | 'THRILLER'
+    | 'WESTERN';
 
 /**
  * Entity-Klasse für das Abbilden von Filmen
@@ -50,12 +51,12 @@ export class Film {
     @VersionColumn()
     readonly version: number | undefined;
 
-    @Column('varchar')
+    @Column('varchar', { length: 30 })
     @ApiProperty({ example: 'Titanic', type: String })
     readonly titel: string | undefined;
 
     @Column('varchar')
-    @ApiProperty({ example: 'Comedy', type: String })
+    @ApiProperty({ example: 'COMEDY', type: String })
     readonly genre: Genre | undefined;
 
     @Column('int')
@@ -71,18 +72,18 @@ export class Film {
     readonly erscheinungsjahr: number | undefined;
 
     @ManyToOne(() => Regisseur, (regisseur) => regisseur.filme)
-    @JoinColumn({ name: 'regisseur_id' })
+    @JoinColumn({ name: 'film_id' })
     @ApiProperty({ example: 'Regisseur des Films', type: Regisseur })
     regisseur: Regisseur | undefined;
 
     @ManyToMany(() => Schauspieler)
-    @JoinTable()
+    @JoinTable({ name: 'film_schauspieler' })
     @ApiProperty({ example: 'Schauspieler des Films', type: Schauspieler })
-    schauspieler: Schauspieler | undefined;
+    schauspieler: Schauspieler[] | undefined;
 
-    @CreateDateColumn('timestamp')
+    @CreateDateColumn({ type: 'timestamp' })
     readonly erzeugt: Date | undefined;
 
-    @UpdateDateColumn('timestamp')
+    @UpdateDateColumn({ type: 'timestamp' })
     readonly aktualisiert: Date | undefined;
 }
