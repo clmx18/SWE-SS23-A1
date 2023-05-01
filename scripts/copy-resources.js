@@ -26,3 +26,10 @@ const tlsPemDist = join(configDist, 'tls');
 mkdirSync(tlsPemDist, { recursive: true });
 copySync(tlsPemSrc, tlsPemDist);
 
+// PEM-Dateien fuer JWT kopieren
+const jwtPemSrc = join(configSrc, 'jwt');
+const jwtPemDist = join(configDist, 'jwt');
+mkdirSync(jwtPemDist, { recursive: true });
+copySync(jwtPemSrc, jwtPemDist);
+
+//TODO Add copy actions für GraphQL!
