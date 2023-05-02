@@ -88,8 +88,9 @@ pipeline {
                 }
 
                 // "clean install", Dauer: ca. 5 Minuten
-                // sh 'npm i --package-lock-only'
+                sh 'npm i --package-lock-only'
                 sh 'npm ci --omit=dev --no-package-lock --force'
+                sh 'npm r -D ts-jest --no-package-lock --force'
                 sh 'npm i -D typescript@rc --no-package-lock --force'
                 sh 'npm audit --omit dev fix --force'
                 sh 'npm i -D ts-jest --no-package-lock --force'
