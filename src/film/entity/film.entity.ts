@@ -37,7 +37,8 @@ export type Genre =
     | 'ROMANCE'
     | 'SCI-FI'
     | 'THRILLER'
-    | 'WESTERN';
+    | 'WESTERN'
+    | undefined;
 
 /**
  * Entity-Klasse für das Abbilden von Filmen
