@@ -11,12 +11,14 @@ import {
     VersionInvalid,
     VersionOutdated,
 } from './errors';
+import { type DeleteResult, Repository } from 'typeorm';
 import { FilmReadService, Suchkriterien } from './film-read.service.js';
 import { Film } from '../entity/film.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import RE2 from 're2';
-import { Repository } from 'typeorm';
+import { Regisseur } from '../entity/regisseur.entity';
+import { Schauspieler } from '../entity/schauspieler.entity';
 import { getLogger } from '../../logger/logger';
 
 /** Interface für die Informationen, die zum Updaten eines Films notwendig sind */
@@ -102,6 +104,45 @@ export class FilmWriteService {
         this.#logger.debug('update: updated=%o', updated);
 
         return updated.version!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    }
+
+    /**
+     * Einen Film anhand einer ID löschen
+     *
+     * @param id ID des Films
+     * @returns true, falls ein Film gelöscht wurde. Sonst false.
+     */
+    async delete(id: number) {
+        this.#logger.debug('delete: id=%d', id);
+        const film = await this.#readService.findById({
+            id,
+            mitRegisseuren: true,
+            mitSchauspielern: true,
+        });
+        if (film === undefined) {
+            return false;
+        }
+
+        let deleteResult: DeleteResult | undefined;
+        await this.#repo.manager.transaction(async (transactionalMgr) => {
+            const regisseurId = film.regisseur?.id;
+            if (regisseurId !== undefined) {
+                await transactionalMgr.delete(Regisseur, regisseurId);
+            }
+            const schauspieler = film.schauspieler ?? [];
+            for (const actor of schauspieler) {
+                await transactionalMgr.delete(Schauspieler, actor.id);
+            }
+
+            deleteResult = await transactionalMgr.delete(Film, id);
+            this.#logger.debug('delete: deleteResult=%o', deleteResult);
+        });
+
+        return (
+            deleteResult?.affected !== undefined &&
+            deleteResult.affected !== null &&
+            deleteResult.affected > 0
+        );
     }
 
     async #validateCreate(film: Film): Promise<CreateError | undefined> {
