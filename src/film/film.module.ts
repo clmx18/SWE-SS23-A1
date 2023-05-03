@@ -1,6 +1,7 @@
 import { AuthModule } from '../security/auth/auth.module.js';
 import { FilmGetController } from './rest/film-get.controller.js';
 import { FilmReadService } from './service/film-read.service.js';
+import { FilmWriteController } from './rest/film-write.controller.js';
 import { FilmWriteService } from './service/film-write.service.js';
 import { Module } from '@nestjs/common';
 import { QueryBuilder } from './service/query-builder.js';
@@ -19,7 +20,7 @@ import { entities } from './entity/entities.js';
  */
 @Module({
     imports: [TypeOrmModule.forFeature(entities), AuthModule],
-    controllers: [FilmGetController],
+    controllers: [FilmGetController, FilmWriteController],
     // Provider sind z.B. Service-Klassen fuer DI
     providers: [FilmReadService, QueryBuilder],
     // Export der Provider fuer DI in anderen Modulen
