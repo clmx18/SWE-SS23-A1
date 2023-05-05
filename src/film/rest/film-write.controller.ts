@@ -29,6 +29,7 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { FilmDTO } from './filmDTO.entity.js';
+import { type CreateError, type UpdateError } from '../service/errors.js';
 import { Request, Response } from 'express';
 import { type Regisseur } from '../entity/regisseur.entity.js';
 import { type Schauspieler } from '../entity/schauspieler.entity.js';
@@ -43,7 +44,7 @@ import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
 
 /**
- * Die Controller-Klasse für die Verwaltung von Bücher.
+ * Die Controller-Klasse für die Verwaltung von Filmen.
  */
 @Controller(paths.rest)
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -80,6 +81,9 @@ export class FilmWriteController {
 
         const film = this.#filmDtoToFilm(filmDTO);
         const result = await this.#service.create(film);
+        if (Object.prototype.hasOwnProperty.call(result, 'type')) {
+            return this.#handleCreateError(result as CreateError, res);
+        }
 
         const location = `${getBaseUri(req)}/${result as number}`;
         this.#logger.debug('create: location=%s', location);
@@ -142,6 +146,15 @@ export class FilmWriteController {
                 .set('Content-Type', 'text/plain')
                 .send(msg);
         }
+
+        const film = this.#filmDtoToFilm(filmDTO);
+        const result = await this.#service.update({ id, film, version });
+        if (typeof result === 'object') {
+            return this.#handleUpdateError(result, res);
+        }
+
+        this.#logger.debug('update: version=%d', result);
+        return res.set('ETag', `"${result}"`).sendStatus(HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -180,8 +193,10 @@ export class FilmWriteController {
     }
 
     #filmDtoToFilm(filmDTO: FilmDTO): Film {
-        const regisseur = filmDTO.regisseur?.map((regisseurDTO) => {
-            const regisseur: Regisseur = {
+        let regisseur;
+        if (filmDTO.regisseur) {
+            const regisseurDTO = filmDTO.regisseur;
+            regisseur = {
                 id: undefined,
                 version: undefined,
                 vorname: regisseurDTO.vorname,
@@ -189,15 +204,14 @@ export class FilmWriteController {
                 geburtsdatum: regisseurDTO.geburtsdatum,
                 filme: regisseurDTO.filme,
             };
-            return regisseur;
-        });
+        }     
         const schauspieler = filmDTO.schauspieler?.map((schauspielerDTO) => {
             const schauspieler: Schauspieler = {
                 id: undefined,
                 version: undefined,
                 vorname: schauspielerDTO.vorname,
                 nachname: schauspielerDTO.nachname,
-                geburtsdatum: schauspielerDTO.geburtsdatum,
+                geburtsdatum: schauspielerDTO.geburtsdatum ? new Date(schauspielerDTO.geburtsdatum) : undefined,
                 groesse: schauspielerDTO.groesse,
                 sozialeMedien: schauspielerDTO.sozialeMedien,
             };
@@ -217,5 +231,67 @@ export class FilmWriteController {
             aktualisiert: undefined,
         };
         return film;
+    }
+
+    #handleCreateError(err: CreateError, res: Response) {
+        switch (err.type) {
+            case 'MovieExists': {
+                return this.#handleMovieExists(err.id, res);
+            }
+
+            default: {
+                return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    #handleMovieExists(
+        id: number | undefined,
+        res: Response,
+    ): Response {
+        const msg = `Der Film mit der ID "${id}" existiert bereits.`;
+        this.#logger.debug('#handleMovieExists(): msg=%s', msg);
+        return res
+            .status(HttpStatus.UNPROCESSABLE_ENTITY)
+            .set('Content-Type', 'text/plain')
+            .send(msg);
+    }
+
+    #handleUpdateError(err: UpdateError, res: Response): Response {
+        switch (err.type) {
+            case 'MovieDoesNotExist': {
+                const { id } = err;
+                const msg = `Es gibt keinen Film mit der ID "${id}".`;
+                this.#logger.debug('#handleUpdateError: msg=%s', msg);
+                return res
+                    .status(HttpStatus.PRECONDITION_FAILED)
+                    .set('Content-Type', 'text/plain')
+                    .send(msg);
+            }
+
+            case 'VersionInvalid': {
+                const { version } = err;
+                const msg = `Die Versionsnummer "${version}" ist ungueltig.`;
+                this.#logger.debug('#handleUpdateError: msg=%s', msg);
+                return res
+                    .status(HttpStatus.PRECONDITION_FAILED)
+                    .set('Content-Type', 'text/plain')
+                    .send(msg);
+            }
+
+            case 'VersionOutdated': {
+                const { version } = err;
+                const msg = `Die Versionsnummer "${version}" ist nicht aktuell.`;
+                this.#logger.debug('#handleUpdateError: msg=%s', msg);
+                return res
+                    .status(HttpStatus.PRECONDITION_FAILED)
+                    .set('Content-Type', 'text/plain')
+                    .send(msg);
+            }
+
+            default: {
+                return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 }
