@@ -28,17 +28,16 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { FilmDTO } from './filmDTO.entity.js';
 import { type CreateError, type UpdateError } from '../service/errors.js';
 import { Request, Response } from 'express';
-import { type Regisseur } from '../entity/regisseur.entity.js';
-import { type Schauspieler } from '../entity/schauspieler.entity.js';
 import { type Film } from '../entity/film.entity.js';
+import { FilmDTO } from './filmDTO.entity.js';
 import { FilmWriteService } from '../service/film-write.service.js';
 import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
 import { RolesGuard } from '../../security/auth/roles/roles.guard.js';
+import { type Schauspieler } from '../entity/schauspieler.entity.js';
 import { getBaseUri } from './getBaseUri.js';
 import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
@@ -201,21 +200,27 @@ export class FilmWriteController {
                 version: undefined,
                 vorname: regisseurDTO.vorname,
                 nachname: regisseurDTO.nachname,
-                geburtsdatum: regisseurDTO.geburtsdatum,
-                filme: regisseurDTO.filme,
+                geburtsdatum:
+                    typeof regisseurDTO.geburtsdatum === 'string'
+                        ? new Date(regisseurDTO.geburtsdatum)
+                        : regisseurDTO.geburtsdatum,
+                filme: undefined,
             };
-        }     
+        }
         const schauspieler = filmDTO.schauspieler?.map((schauspielerDTO) => {
-            const schauspieler: Schauspieler = {
+            const actor: Schauspieler = {
                 id: undefined,
                 version: undefined,
                 vorname: schauspielerDTO.vorname,
                 nachname: schauspielerDTO.nachname,
-                geburtsdatum: schauspielerDTO.geburtsdatum ? new Date(schauspielerDTO.geburtsdatum) : undefined,
+                geburtsdatum:
+                    typeof schauspielerDTO.geburtsdatum === 'string'
+                        ? new Date(schauspielerDTO.geburtsdatum)
+                        : schauspielerDTO.geburtsdatum,
                 groesse: schauspielerDTO.groesse,
                 sozialeMedien: schauspielerDTO.sozialeMedien,
             };
-            return schauspieler;
+            return actor;
         });
         const film = {
             id: undefined,
@@ -245,10 +250,7 @@ export class FilmWriteController {
         }
     }
 
-    #handleMovieExists(
-        id: number | undefined,
-        res: Response,
-    ): Response {
+    #handleMovieExists(id: number | undefined, res: Response): Response {
         const msg = `Der Film mit der ID "${id}" existiert bereits.`;
         this.#logger.debug('#handleMovieExists(): msg=%s', msg);
         return res
