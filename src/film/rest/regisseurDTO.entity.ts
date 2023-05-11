@@ -17,10 +17,10 @@ import { Type } from 'class-transformer';
  * Entity-Klasse für einen Regisseur ohne TypeORM und mit Validierung
  */
 export class RegisseurDTO {
-    @MaxLength(32)
+    @MaxLength(20)
     readonly vorname: string | undefined;
 
-    @MaxLength(32)
+    @MaxLength(20)
     readonly nachname: string | undefined;
 
     @IsISO8601({ strict: true })
