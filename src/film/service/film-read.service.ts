@@ -15,7 +15,7 @@ import { getLogger } from '../../logger/logger.js';
 export interface FindByIdParams {
     /** ID des gesuchten Films */
     id: number;
-    /** Sollen die Abbildungen mitgeladen werden? */
+    /** Sollen auch der Regisseur und die Schauspieler geladen werden? */
     mitSchauspielern?: boolean;
     mitRegisseuren?: boolean;
 }
@@ -25,8 +25,8 @@ export interface Suchkriterien {
     readonly genre?: Genre;
     readonly spieldauer?: number;
     readonly erscheinungsjahr?: number;
-    readonly javascript?: boolean;
-    readonly typescript?: boolean;
+    readonly mitRegisseur?: boolean;
+    readonly mitSchauspielern?: boolean;
 }
 /**
  * Die Klasse `FilmReadService` implementiert das Lesen für Filme und greift
@@ -56,8 +56,8 @@ export class FilmReadService {
      */
     async findById({
         id,
-        mitSchauspielern = false,
-        mitRegisseuren = false,
+        mitSchauspielern = true,
+        mitRegisseuren = true,
     }: FindByIdParams) {
         this.#logger.debug('findById: id=%d', id);
 
@@ -113,8 +113,8 @@ export class FilmReadService {
         keys.forEach((key) => {
             if (
                 !this.#filmProps.includes(key) &&
-                key !== 'javascript' &&
-                key !== 'typescript'
+                key !== 'mitRegisseur' &&
+                key !== 'mitSchauspielern'
             ) {
                 this.#logger.debug(
                     '#find: ungueltiges Suchkriterium "%s"',

@@ -1,7 +1,44 @@
 // Suche alle Filme
 GET {{restUrl}}
-
 ###
 
 // Suche einen Film andhand einer vorhandenen ID
 GET {{restUrl}}/1001
+###
+
+//Suche einen Film anhand einer nicht vorhandenen ID
+GET {{restUrl}}/1
+###
+
+// Suche mit gültiger Versionsnummer
+GET {{restUrl}}/1001
+If-None-Match: "0"
+###
+
+// Suche mit ungültigen Versionsnummern
+GET {{restUrl}}/1001
+If-None-Match: 0
+###
+GET {{restUrl}}/1001
+If-None-Match: "999999"
+###
+
+//Suche Filme anhand von vorhandenen Suchkriterien
+GET {{restUrl}}?titel=The+Godfather
+###
+GET {{restUrl}}?erscheinungsjahr=1972
+###
+GET {{restUrl}}?titel=The+Godfather&erscheinungsjahr=1972
+###
+GET {{restUrl}}?genre=DRAMA
+###
+GET {{restUrl}}?genre=DRAMA&mitRegisseur=true
+###
+GET {{restUrl}}?genre=DRAMA&mitRegisseur=true&mitSchauspielern=true
+###
+
+//Suche Filme anhand von nicht vorhandenen Suchkriterien
+GET {{restUrl}}?filmposter=true
+###
+GET {{restUrl}}?titel=Cats+and+Dogs
+###
