@@ -56,13 +56,13 @@ CREATE TABLE IF NOT EXISTS schauspieler (
     nachname        varchar(20) NOT NULL,
     geburtsdatum    date NOT NULL,
     groesse    integer NOT NULL CHECK (groesse > 0),
-    soziale_medien jsonb,
+    soziale_medien jsonb
     -- https://www.postgresql.org/docs/current/datatype-json.html
-    film_id         integer NOT NULL REFERENCES film
+    -- film_id         integer NOT NULL REFERENCES film
 ) TABLESPACE filmspace;
 
 CREATE TABLE IF NOT EXISTS film_schauspieler (
     film_id    int REFERENCES film(id) ON UPDATE CASCADE ON DELETE CASCADE,
     schauspieler_id int REFERENCES schauspieler(id) ON UPDATE CASCADE,
     CONSTRAINT film_schauspieler_pkey PRIMARY KEY (film_id, schauspieler_id)  -- explicit pk
-)
+) TABLESPACE filmspace;
