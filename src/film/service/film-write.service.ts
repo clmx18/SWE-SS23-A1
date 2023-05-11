@@ -13,13 +13,13 @@ import {
 } from './errors';
 import { type DeleteResult, Repository } from 'typeorm';
 import { FilmReadService, Suchkriterien } from './film-read.service.js';
-import { Film } from '../entity/film.entity';
+import { Film } from '../entity/film.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import RE2 from 're2';
-import { Regisseur } from '../entity/regisseur.entity';
-import { Schauspieler } from '../entity/schauspieler.entity';
-import { getLogger } from '../../logger/logger';
+import { Regisseur } from '../entity/regisseur.entity.js';
+import { Schauspieler } from '../entity/schauspieler.entity.js';
+import { getLogger } from '../../logger/logger.js';
 
 /** Interface für die Informationen, die zum Updaten eines Films notwendig sind */
 export interface UpdateParams {

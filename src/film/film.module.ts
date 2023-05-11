@@ -22,7 +22,7 @@ import { entities } from './entity/entities.js';
     imports: [TypeOrmModule.forFeature(entities), AuthModule],
     controllers: [FilmGetController, FilmWriteController],
     // Provider sind z.B. Service-Klassen fuer DI
-    providers: [FilmReadService, QueryBuilder],
+    providers: [FilmReadService, FilmWriteService, QueryBuilder],
     // Export der Provider fuer DI in anderen Modulen
     exports: [FilmReadService, FilmWriteService],
 })
