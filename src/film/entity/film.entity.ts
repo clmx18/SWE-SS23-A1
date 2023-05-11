@@ -73,7 +73,7 @@ export class Film {
     readonly erscheinungsjahr: number | undefined;
 
     @ManyToOne(() => Regisseur, (regisseur) => regisseur.filme)
-    @JoinColumn({ name: 'film_id' })
+    @JoinColumn({ name: 'regisseur_id' })
     @ApiProperty({ example: 'Regisseur des Films', type: Regisseur })
     regisseur: Regisseur | undefined;
 

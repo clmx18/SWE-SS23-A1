@@ -57,7 +57,7 @@ export class QueryBuilder {
         mitRegisseuren = false,
     }: BuildIdParams) {
         const queryBuilder = this.#repo.createQueryBuilder(this.#filmAlias);
-        queryBuilder.select(`${this.#filmAlias}.titel`);
+        // queryBuilder.select(`${this.#filmAlias}.titel`);
 
         if (mitSchauspielern) {
             queryBuilder.leftJoinAndSelect(

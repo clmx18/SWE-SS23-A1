@@ -25,8 +25,8 @@ import { resolve } from 'node:path';
 @Injectable()
 export class DbPopulateService implements OnApplicationBootstrap {
     readonly #tabellen = [
-        'film',
         'regisseur',
+        'film',
         'schauspieler',
         'film_schauspieler',
     ];

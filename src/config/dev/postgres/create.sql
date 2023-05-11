@@ -13,6 +13,15 @@ ALTER ROLE film SET search_path = 'film';
 -- https://www.postgresql.org/docs/current/datatype-enum.html
 CREATE TYPE genreart AS ENUM ('ACTION', 'ADVENTURE', 'ANIMATION', 'BIOGRAPHY', 'COMEDY', 'CRIME','DRAMA', 'FANTASY', 'FILM-NOIR', 'HISTORY', 'HORROR', 'MYSTERY', 'ROMANCE', 'SCI-FI','THRILLER', 'WESTERN');
 
+CREATE TABLE IF NOT EXISTS regisseur (
+    id          integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY USING INDEX TABLESPACE filmspace,
+    version     integer NOT NULL DEFAULT 0,
+    vorname     varchar(20) NOT NULL,
+    nachname    varchar(20) NOT NULL,
+    geburtsdatum  date NOT NULL
+    -- film_id     integer NOT NULL UNIQUE USING INDEX TABLESPACE filmspace REFERENCES film
+) TABLESPACE filmspace;
+
 -- https://www.postgresql.org/docs/current/sql-createtable.html
 -- https://www.postgresql.org/docs/current/datatype.html
 CREATE TABLE IF NOT EXISTS film (
@@ -33,21 +42,12 @@ CREATE TABLE IF NOT EXISTS film (
                   -- 10 Stellen, davon 2 Nachkommastellen
     spieldauer    integer NOT NULL CHECK (spieldauer > 0),
     erscheinungsjahr    integer NOT NULL CHECK (erscheinungsjahr > 0),
+    regisseur_id     integer NOT NULL UNIQUE USING INDEX TABLESPACE filmspace REFERENCES regisseur,
     
                   -- https://www.postgresql.org/docs/current/datatype-datetime.html
     erzeugt       timestamp NOT NULL DEFAULT NOW(),
     aktualisiert  timestamp NOT NULL DEFAULT NOW()
 ) TABLESPACE filmspace;
-
-CREATE TABLE IF NOT EXISTS regisseur (
-    id          integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY USING INDEX TABLESPACE filmspace,
-    version     integer NOT NULL DEFAULT 0,
-    vorname     varchar(20) NOT NULL,
-    nachname    varchar(20) NOT NULL,
-    geburtsdatum  date NOT NULL,
-    film_id     integer NOT NULL UNIQUE USING INDEX TABLESPACE filmspace REFERENCES film
-) TABLESPACE filmspace;
-
 
 CREATE TABLE IF NOT EXISTS schauspieler (
     id              integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY USING INDEX TABLESPACE filmspace,

@@ -1,2 +1,7 @@
 // Suche alle Filme
 GET {{restUrl}}
+
+###
+
+// Suche einen Film andhand einer vorhandenen ID
+GET {{restUrl}}/1001
