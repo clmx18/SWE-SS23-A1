@@ -7,6 +7,7 @@ import {
     ArrayUnique,
     IsArray,
     IsInt,
+    IsOptional,
     IsPositive,
     Matches,
     Max,
@@ -59,6 +60,7 @@ export class FilmDTO {
     @IsArray()
     @ArrayUnique()
     @ValidateNested()
+    @IsOptional()
     @Type(() => SchauspielerDTO)
     schauspieler: SchauspielerDTO[] | undefined;
 }

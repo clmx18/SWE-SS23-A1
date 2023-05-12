@@ -239,19 +239,15 @@ export class FilmWriteController {
     }
 
     #handleCreateError(err: CreateError, res: Response) {
-        switch (err.type) {
-            case 'MovieExists': {
-                return this.#handleMovieExists(err.id, res);
-            }
-
-            default: {
-                return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        //eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (err.type === 'MovieExists') {
+            return this.#handleMovieExists(err, res);
         }
+        return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    #handleMovieExists(id: number | undefined, res: Response): Response {
-        const msg = `Der Film mit der ID "${id}" existiert bereits.`;
+    #handleMovieExists(err: CreateError, res: Response): Response {
+        const msg = `Der Film '${err.titel}'(${err.erscheinungsjahr}) mit Spieldauer ${err.spieldauer} Minuten existiert bereits.`;
         this.#logger.debug('#handleMovieExists(): msg=%s', msg);
         return res
             .status(HttpStatus.UNPROCESSABLE_ENTITY)

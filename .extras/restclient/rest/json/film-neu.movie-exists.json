@@ -1,0 +1,12 @@
+{
+  "titel": "The Godfather",
+  "rating": 5,
+  "genre": "DRAMA",
+  "spieldauer": 175,
+  "erscheinungsjahr": 1972,
+  "regisseur": {
+    "vorname": "Francis Ford",
+    "nachname": "Coppola",
+    "geburtsdatum": "1939-04-07"
+  }
+}

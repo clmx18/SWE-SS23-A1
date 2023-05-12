@@ -12,6 +12,9 @@ export interface MovieExists {
     readonly type: 'MovieExists';
     readonly suchkriterien?: Suchkriterien;
     readonly id?: number;
+    readonly titel: string | undefined;
+    readonly erscheinungsjahr: number | undefined;
+    readonly spieldauer: number | undefined;
 }
 
 /**

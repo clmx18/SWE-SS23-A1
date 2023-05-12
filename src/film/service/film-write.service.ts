@@ -158,7 +158,7 @@ export class FilmWriteService {
         };
         const filme = await this.#readService.find(findParams);
         if (filme.length > 0) {
-            return { type: 'MovieExists', suchkriterien: findParams };
+            return { type: 'MovieExists', titel, erscheinungsjahr, spieldauer };
         }
 
         this.#logger.debug('#validateCreate: ok');
