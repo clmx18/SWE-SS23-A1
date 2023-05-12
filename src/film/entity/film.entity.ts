@@ -72,12 +72,16 @@ export class Film {
     @ApiProperty({ example: 1989, type: Number })
     readonly erscheinungsjahr: number | undefined;
 
-    @ManyToOne(() => Regisseur, (regisseur) => regisseur.filme)
+    @ManyToOne(() => Regisseur, (regisseur) => regisseur.filme, {
+        cascade: ['insert'],
+    })
     @JoinColumn({ name: 'regisseur_id' })
     @ApiProperty({ example: 'Regisseur des Films', type: Regisseur })
     regisseur: Regisseur | undefined;
 
-    @ManyToMany(() => Schauspieler)
+    @ManyToMany(() => Schauspieler, {
+        cascade: ['insert'],
+    })
     @JoinTable({ name: 'film_schauspieler' })
     @ApiProperty({ example: 'Schauspieler des Films', type: Schauspieler })
     schauspieler: Schauspieler[] | undefined;

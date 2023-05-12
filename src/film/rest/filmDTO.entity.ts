@@ -26,15 +26,15 @@ export const MAX_RATING = 5;
  * Entity-Klasse für einen Film ohne TypeORM und mit Validierung
  */
 export class FilmDTO {
-    @MaxLength(128)
+    @MaxLength(30)
     @ApiProperty({ example: 'Titanic', type: String })
     readonly titel: string | undefined;
 
     @MaxLength(32)
     @Matches(
-        /^Action$|^Adventure$|^Animation$|^Biography$|^Comedy$|^Drama$|^Fantasy$|^Film-Noir$|^History$|^Horror$|^Mystery$|^Romance$|^Sci-Fi$|^Thriller$|^Western'/u,
+        /^ACTION$|^ADVENTURE$|^ANIMATION$|^BIOGRAPHY$|^COMEDY$|^DRAMA$|^FANTASY$|^FILM-NOIR$|^HISTORY$|^HORROR$|^MYSTERY$|^ROMANCE$|^SCI-FI$|^THRILLER$|^WESTERN'/u,
     )
-    @ApiProperty({ example: 'Comedy', type: String })
+    @ApiProperty({ example: 'COMEDY', type: String })
     readonly genre: Genre | undefined;
 
     @Min(0)

@@ -3,15 +3,7 @@
  * Das Modul enthält die Entity-Klasse 'RegisseurDTO'
  * @packageDocumentation
  */
-import {
-    ArrayUnique,
-    IsArray,
-    IsISO8601,
-    MaxLength,
-    ValidateNested,
-} from 'class-validator';
-import { FilmDTO } from './filmDTO.entity.js';
-import { Type } from 'class-transformer';
+import { IsISO8601, MaxLength } from 'class-validator';
 
 /**
  * Entity-Klasse für einen Regisseur ohne TypeORM und mit Validierung
@@ -25,11 +17,5 @@ export class RegisseurDTO {
 
     @IsISO8601({ strict: true })
     readonly geburtsdatum: Date | string | undefined;
-
-    @IsArray()
-    @ArrayUnique()
-    @ValidateNested()
-    @Type(() => FilmDTO)
-    readonly filme: FilmDTO[] | undefined;
 }
 /* eslint-enable @typescript-eslint/no-magic-numbers */
