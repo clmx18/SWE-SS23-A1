@@ -2,13 +2,14 @@
  * Das Modul besteht aus der Controller-Klasse für Schreiben an der REST-Schnittstelle.
  * @packageDocumentation
  */
-
+/* eslint-disable max-lines */
 import {
     ApiBadRequestResponse,
     ApiBearerAuth,
     ApiCreatedResponse,
     ApiHeader,
     ApiNoContentResponse,
+    ApiNotFoundResponse,
     ApiOperation,
     ApiPreconditionFailedResponse,
     ApiResponse,
@@ -173,7 +174,10 @@ export class FilmWriteController {
         required: true,
     })
     @ApiNoContentResponse({
-        description: 'Der Film wurde gelöscht oder war nicht vorhanden',
+        description: 'Der Film wurde gelöscht',
+    })
+    @ApiNotFoundResponse({
+        description: 'Der Film war nicht vorhanden',
     })
     async delete(
         @Param('id') id: number,
@@ -182,7 +186,10 @@ export class FilmWriteController {
         this.#logger.debug('delete: id=%s', id);
 
         try {
-            await this.#service.delete(id);
+            const deleteResult = await this.#service.delete(id);
+            if (!deleteResult) {
+                return res.sendStatus(HttpStatus.NOT_FOUND);
+            }
         } catch (err) {
             this.#logger.error('delete: error=%o', err);
             return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -293,3 +300,4 @@ export class FilmWriteController {
         }
     }
 }
+/* eslint-enable max-lines */

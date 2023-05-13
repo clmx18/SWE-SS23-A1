@@ -128,16 +128,18 @@ export class FilmWriteService {
 
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {
-            const regisseurId = film.regisseur?.id;
-            if (regisseurId !== undefined) {
-                await transactionalMgr.delete(Regisseur, regisseurId);
-            }
+            deleteResult = await transactionalMgr.delete(Film, id);
+
             const schauspieler = film.schauspieler ?? [];
             for (const actor of schauspieler) {
                 await transactionalMgr.delete(Schauspieler, actor.id);
             }
 
-            deleteResult = await transactionalMgr.delete(Film, id);
+            const regisseurId = film.regisseur?.id;
+            if (regisseurId !== undefined) {
+                await transactionalMgr.delete(Regisseur, regisseurId);
+            }
+
             this.#logger.debug('delete: deleteResult=%o', deleteResult);
         });
 
