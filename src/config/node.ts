@@ -5,13 +5,13 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { type HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface.js';
-import { env } from './env.js';
 import { cloud } from './cloud.js';
-import { k8sConfig } from './kubernetes.js';
+import { env } from './env.js';
 import { hostname } from 'node:os';
+import { k8sConfig } from './kubernetes.js';
 import { resolve } from 'node:path';
 
-const { NODE_ENV, PORT, FILM_SERVICE_HOST, FILM_SERVICE_PORT, LOG_DEFAULT  } =
+const { NODE_ENV, PORT, FILM_SERVICE_HOST, FILM_SERVICE_PORT, LOG_DEFAULT } =
     env;
 
 const computername = hostname();
