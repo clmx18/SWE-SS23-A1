@@ -6,7 +6,7 @@
 import {
     IsISO8601,
     IsInt,
-    IsJSON,
+    IsObject,
     IsOptional,
     IsPositive,
     MaxLength,
@@ -30,8 +30,8 @@ export class SchauspielerDTO {
     @IsOptional()
     readonly groesse: number | undefined;
 
-    @IsJSON()
     @IsOptional()
+    @IsObject()
     readonly sozialeMedien: { twitter: string; instagram: string } | undefined;
 }
 /* eslint-enable @typescript-eslint/no-magic-numbers */

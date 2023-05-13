@@ -1,0 +1,14 @@
+{
+  "titel": "SehrLangerGutUnüberlegterTitelDerAufJedenFallZuLangIst",
+  "rating": 6,
+  "genre": "ROMCOM",
+  "spieldauer": -1,
+  "erscheinungsjahr": -1,
+  "schauspieler": {
+      "vorname": "Bactor",
+      "nachname": "Actor",
+      "geburtsdatum": "32.13.0",
+      "groesse": -1,
+      "sozialeMedien": null
+  }
+}

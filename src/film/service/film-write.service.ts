@@ -3,7 +3,7 @@
  * Schreiboperationen im Anwendungskern.
  * @packageDocumentation
  */
-
+/* eslint-disable max-lines */
 import {
     CreateError,
     MovieDoesNotExist,
@@ -19,6 +19,7 @@ import { Injectable } from '@nestjs/common';
 import RE2 from 're2';
 import { Regisseur } from '../entity/regisseur.entity.js';
 import { Schauspieler } from '../entity/schauspieler.entity.js';
+import { SchauspielerDTO } from '../rest/schauspielerDTO.entity';
 import { getLogger } from '../../logger/logger.js';
 
 /** Interface für die Informationen, die zum Updaten eines Films notwendig sind */
@@ -32,7 +33,7 @@ export interface UpdateParams {
 }
 @Injectable()
 export class FilmWriteService {
-    private static readonly VERSION_PATTERN = new RE2('^"\\d*"');
+    private static readonly VERSION_PATTERN = new RE2('"-?[\\d]*"');
 
     readonly #repo: Repository<Film>;
 
@@ -97,8 +98,10 @@ export class FilmWriteService {
             return validateResult;
         }
 
-        const filmNeu = validateResult;
-        const merged = this.#repo.merge(filmNeu, film);
+        const filmDb = validateResult;
+        film.schauspieler = this.#removeDuplicatesSchauspieler(filmDb, film);
+
+        const merged = this.#repo.merge(filmDb, film);
         this.#logger.debug('update: merged=%o', merged);
         const updated = await this.#repo.save(merged);
         this.#logger.debug('update: updated=%o', updated);
@@ -208,7 +211,7 @@ export class FilmWriteService {
         if (filmDb === undefined) {
             const result: MovieDoesNotExist = { type: 'MovieDoesNotExist', id };
             this.#logger.debug(
-                '#checkIdAndVersion: MovieDoesNotExist=%o',
+                '#findByIdAndCheckVersion: MovieDoesNotExist=%o',
                 result,
             );
             return result;
@@ -222,7 +225,7 @@ export class FilmWriteService {
                 version,
             };
             this.#logger.debug(
-                '#checkIdAndVersion: VersionOutdated=%o',
+                '#findByIdAndCheckVersion: VersionOutdated=%o',
                 result,
             );
             return result;
@@ -230,4 +233,84 @@ export class FilmWriteService {
 
         return filmDb;
     }
+
+    #schauspielerToSchauspielerDto(
+        schauspieler: Schauspieler,
+    ): SchauspielerDTO {
+        const schauspielerDto: SchauspielerDTO = {
+            vorname: schauspieler.vorname,
+            nachname: schauspieler.nachname,
+            geburtsdatum:
+                typeof schauspieler.geburtsdatum === 'string'
+                    ? new Date(schauspieler.geburtsdatum)
+                    : schauspieler.geburtsdatum,
+            groesse: schauspieler.groesse,
+            sozialeMedien: schauspieler.sozialeMedien,
+        };
+        return schauspielerDto;
+    }
+
+    #compareSchauspieler(
+        schauspielerA: Schauspieler,
+        schauspielerB: Schauspieler,
+    ): boolean {
+        this.#logger.debug(
+            '#compareSchauspieler: schauspielerA=%o, schauspielerB=%o',
+            schauspielerA,
+            schauspielerB,
+        );
+        const schauspielerADto =
+            this.#schauspielerToSchauspielerDto(schauspielerA);
+        const schauspielerBDto =
+            this.#schauspielerToSchauspielerDto(schauspielerB);
+        this.#logger.debug(
+            '#compareSchauspieler: stringifyA=%s, stringifyB=%s, bool=%s',
+            JSON.stringify(schauspielerADto),
+            JSON.stringify(schauspielerBDto),
+            JSON.stringify(schauspielerADto) ===
+                JSON.stringify(schauspielerBDto),
+        );
+        const returner =
+            JSON.stringify(schauspielerADto) ===
+            JSON.stringify(schauspielerBDto);
+        return returner;
+    }
+
+    #removeDuplicatesSchauspieler(
+        filmDb: Film,
+        film: Film,
+    ): Schauspieler[] | undefined {
+        this.#logger.debug(
+            '#removeDuplicatesSchauspieler: filmDb=%o, film=%o',
+            filmDb,
+            film,
+        );
+        if (
+            film.schauspieler !== undefined &&
+            filmDb.schauspieler !== undefined
+        ) {
+            const neueSchauspieler: Schauspieler[] = [];
+            film.schauspieler.forEach((schauspielerA) => {
+                let duplicate = false;
+                filmDb.schauspieler?.forEach((schauspielerB) => {
+                    if (
+                        this.#compareSchauspieler(schauspielerA, schauspielerB)
+                    ) {
+                        duplicate = true;
+                    }
+                });
+                //eslint-disable-next-line  @typescript-eslint/no-unnecessary-condition
+                if (!duplicate) {
+                    neueSchauspieler.push(schauspielerA);
+                }
+            });
+            this.#logger.debug(
+                '#removeDuplicatesSchauspieler: neueSchauspieler=%o',
+                neueSchauspieler,
+            );
+            return neueSchauspieler;
+        }
+        return undefined;
+    }
 }
+/* eslint-enable max-lines */
