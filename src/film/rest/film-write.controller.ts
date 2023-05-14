@@ -28,17 +28,17 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { FilmDTO } from './filmDTO.entity.js';
 import { type CreateError, type UpdateError } from '../service/errors.js';
 import { Request, Response } from 'express';
-import { type Regisseur } from '../entity/regisseur.entity.js';
-import { type Schauspieler } from '../entity/schauspieler.entity.js';
 import { type Film } from '../entity/film.entity.js';
+import { FilmDTO } from './filmDTO.entity.js';
 import { FilmWriteService } from '../service/film-write.service.js';
 import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
+import { type Regisseur } from '../entity/regisseur.entity.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
 import { RolesGuard } from '../../security/auth/roles/roles.guard.js';
+import { type Schauspieler } from '../entity/schauspieler.entity.js';
 import { getBaseUri } from './getBaseUri.js';
 import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
@@ -193,30 +193,33 @@ export class FilmWriteController {
     }
 
     #filmDtoToFilm(filmDTO: FilmDTO): Film {
-        let regisseur;
-        if (filmDTO.regisseur) {
-            const regisseurDTO = filmDTO.regisseur;
-            regisseur = {
-                id: undefined,
-                version: undefined,
-                vorname: regisseurDTO.vorname,
-                nachname: regisseurDTO.nachname,
-                geburtsdatum: regisseurDTO.geburtsdatum,
-                filme: regisseurDTO.filme,
-            };
-        }     
-        const schauspieler = filmDTO.schauspieler?.map((schauspielerDTO) => {
-            const schauspieler: Schauspieler = {
-                id: undefined,
-                version: undefined,
-                vorname: schauspielerDTO.vorname,
-                nachname: schauspielerDTO.nachname,
-                geburtsdatum: schauspielerDTO.geburtsdatum ? new Date(schauspielerDTO.geburtsdatum) : undefined,
-                groesse: schauspielerDTO.groesse,
-                sozialeMedien: schauspielerDTO.sozialeMedien,
-            };
-            return schauspieler;
-        });
+        const regisseur: Regisseur = {
+            id: undefined,
+            version: undefined,
+            filme: undefined,
+            vorname: filmDTO.regisseur?.vorname,
+            nachname: filmDTO.regisseur?.nachname,
+            geburtsdatum:
+                filmDTO.regisseur?.geburtsdatum === undefined
+                    ? undefined
+                    : new Date(filmDTO.regisseur.geburtsdatum as string),
+        };
+
+        const schauspielerListe = filmDTO.schauspieler?.map(
+            (schauspielerDTO) => {
+                const schauspieler: Schauspieler = {
+                    id: undefined,
+                    version: undefined,
+                    vorname: schauspielerDTO.vorname,
+                    nachname: schauspielerDTO.nachname,
+                    geburtsdatum: schauspielerDTO.geburtsdatum,
+                    groesse: schauspielerDTO.groesse,
+                    sozialeMedien: undefined,
+                };
+                return schauspieler;
+            },
+        );
+
         const film = {
             id: undefined,
             version: undefined,
@@ -226,10 +229,11 @@ export class FilmWriteController {
             spieldauer: filmDTO.spieldauer,
             erscheinungsjahr: filmDTO.erscheinungsjahr,
             regisseur,
-            schauspieler,
+            schauspieler: schauspielerListe,
             erzeugt: undefined,
             aktualisiert: undefined,
         };
+
         return film;
     }
 
@@ -245,10 +249,7 @@ export class FilmWriteController {
         }
     }
 
-    #handleMovieExists(
-        id: number | undefined,
-        res: Response,
-    ): Response {
+    #handleMovieExists(id: number | undefined, res: Response): Response {
         const msg = `Der Film mit der ID "${id}" existiert bereits.`;
         this.#logger.debug('#handleMovieExists(): msg=%s', msg);
         return res

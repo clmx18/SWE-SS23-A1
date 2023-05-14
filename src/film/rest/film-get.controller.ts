@@ -14,11 +14,6 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { type Film, type Genre } from '../entity/film.entity.js';
-import {
-    FilmReadService,
-    type Suchkriterien,
-} from '../service/film-read.service.js';
 import {
     Controller,
     Get,
@@ -30,6 +25,11 @@ import {
     Res,
     UseInterceptors,
 } from '@nestjs/common';
+import { type Film, type Genre } from '../entity/film.entity.js';
+import {
+    FilmReadService,
+    type Suchkriterien,
+} from '../service/film-read.service.js';
 import { Request, Response } from 'express';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { getBaseUri } from './getBaseUri.js';

@@ -2,6 +2,7 @@
  * Das Modul enthält die Entity-Klasse 'Regisseur'
  * @packageDocumentation
  */
+import { ApiProperty } from '@nestjs/swagger';
 import {
     Column,
     Entity,
@@ -9,7 +10,6 @@ import {
     PrimaryGeneratedColumn,
     VersionColumn,
 } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
 import { Film } from './film.entity.js';
 
 /**
