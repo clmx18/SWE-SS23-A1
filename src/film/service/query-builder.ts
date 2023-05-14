@@ -57,7 +57,7 @@ export class QueryBuilder {
         mitRegisseuren = false,
     }: BuildIdParams) {
         const queryBuilder = this.#repo.createQueryBuilder(this.#filmAlias);
-        queryBuilder.select(`${this.#filmAlias}.titel`);
+        // queryBuilder.select(`${this.#filmAlias}.titel`);
 
         if (mitSchauspielern) {
             queryBuilder.leftJoinAndSelect(
@@ -81,26 +81,26 @@ export class QueryBuilder {
      * @param suchkriterien JSON-Objekt mit Suchkriterien
      * @returns QueryBuilder
      */
-    // eslint-disable-next-line max-lines-per-function
     build(suchkriterien: Record<string, any>) {
         this.#logger.debug('build: suchkriterien=%o', suchkriterien);
 
         let queryBuilder = this.#repo.createQueryBuilder(this.#filmAlias);
-        queryBuilder.innerJoinAndSelect(`${this.#filmAlias}.titel`, 'titel');
 
-        // z.B. { titel: 'a', rating: 5, javascript: true }
         // "rest properties" fuer anfaengliche WHERE-Klausel: ab ES 2018 https://github.com/tc39/proposal-object-rest-spread
         // type-coverage:ignore-next-line
-        const { titel, javascript, typescript, ...props } = suchkriterien;
+
+        const { titel, mitRegisseur, mitSchauspielern, ...props } =
+            suchkriterien;
 
         let useWhere = true;
+
+        const ilike =
+            typeOrmModuleOptions.type === 'postgres' ? 'ilike' : 'like';
 
         // Titel in der Query: Teilstring des Titels und "case insensitive"
         // CAVEAT: MySQL hat keinen Vergleich mit "case insensitive"
         // type-coverage:ignore-next-line
         if (titel !== undefined && typeof titel === 'string') {
-            const ilike =
-                typeOrmModuleOptions.type === 'postgres' ? 'ilike' : 'like';
             queryBuilder = queryBuilder.where(
                 `${this.#filmAlias}.titel ${ilike} :titel`,
                 { titel: `%${titel}%` },
@@ -108,26 +108,17 @@ export class QueryBuilder {
             useWhere = false;
         }
 
-        if (javascript === 'true') {
-            queryBuilder = useWhere
-                ? queryBuilder.where(
-                      `${this.#filmAlias}.genre like '%JAVASCRIPT%'`,
-                  )
-                : queryBuilder.andWhere(
-                      `${this.#filmAlias}.genre like '%JAVASCRIPT%'`,
-                  );
-            useWhere = false;
+        if (mitSchauspielern === 'true') {
+            queryBuilder.leftJoinAndSelect(
+                `${this.#filmAlias}.schauspieler`,
+                this.#schauspielerAlias,
+            );
         }
-
-        if (typescript === 'true') {
-            queryBuilder = useWhere
-                ? queryBuilder.where(
-                      `${this.#filmAlias}.genre like '%TYPESCRIPT%'`,
-                  )
-                : queryBuilder.andWhere(
-                      `${this.#filmAlias}.genre like '%TYPESCRIPT%'`,
-                  );
-            useWhere = false;
+        if (mitRegisseur === 'true') {
+            queryBuilder.leftJoinAndSelect(
+                `${this.#filmAlias}.regisseur`,
+                this.#regisseurAlias,
+            );
         }
 
         // Restliche Properties als Key-Value-Paare: Vergleiche auf Gleichheit

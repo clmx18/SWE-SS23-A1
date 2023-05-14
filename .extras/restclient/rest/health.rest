@@ -1,0 +1,7 @@
+// Kann man auf die Schnittstellen des MicroService zugreifen?
+GET {{healthUrl}}/live
+###
+
+// Könnte der MS zurzeit Anfragen verarbeiten?
+GET {{healthUrl}}/ready
+###

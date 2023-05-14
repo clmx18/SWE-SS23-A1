@@ -6,7 +6,7 @@
 import {
     IsISO8601,
     IsInt,
-    IsJSON,
+    IsObject,
     IsOptional,
     IsPositive,
     MaxLength,
@@ -16,10 +16,10 @@ import {
  * Entity-Klasse für einen Schauspieler ohne TypeORM und mit Validierung
  */
 export class SchauspielerDTO {
-    @MaxLength(32)
+    @MaxLength(20)
     readonly vorname: string | undefined;
 
-    @MaxLength(32)
+    @MaxLength(20)
     readonly nachname: string | undefined;
 
     @IsISO8601({ strict: true })
@@ -30,8 +30,8 @@ export class SchauspielerDTO {
     @IsOptional()
     readonly groesse: number | undefined;
 
-    @IsJSON()
     @IsOptional()
+    @IsObject()
     readonly sozialeMedien: { twitter: string; instagram: string } | undefined;
 }
 /* eslint-enable @typescript-eslint/no-magic-numbers */

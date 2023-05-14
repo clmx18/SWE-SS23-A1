@@ -55,7 +55,7 @@ export class HealthController {
                     'film REST-API',
                     `${this.#schema}://${nodeConfig.host}:${
                         nodeConfig.port
-                    }/00000000-0000-0000-0000-000000000001`,
+                    }/rest/`,
                     { httpsAgent: this.#httpsAgent },
                 ),
         ]);

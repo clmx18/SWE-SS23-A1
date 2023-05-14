@@ -1,0 +1,46 @@
+// Login mit Admin-Privilegien
+// @name login
+POST {{authUrl}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=p
+###
+
+// Login ohne Admin-Privilegien
+// @name login
+POST {{authUrl}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username=john.doe&password=p
+###
+
+// Neuen Film erfolgreich anlegen
+POST {{restUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+< .\json\film-neu.json
+###
+
+// Neuen Film mit fehlerhaften Daten versuchen anzulegen
+POST {{restUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+< .\json\film-neu-invalid.json
+###
+
+// Versuche einen bereits vorhandenen Film nochmal in die DB einzufügen
+POST {{restUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+< .\json\film-neu.movie-exists.json
+###
+
+// Neuen Film ohne Login anlegen
+POST {{restUrl}}
+Content-Type: application/json
+
+< .\json\film-neu.json
+###

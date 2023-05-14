@@ -2,13 +2,14 @@
  * Das Modul besteht aus der Controller-Klasse für Schreiben an der REST-Schnittstelle.
  * @packageDocumentation
  */
-
+/* eslint-disable max-lines */
 import {
     ApiBadRequestResponse,
     ApiBearerAuth,
     ApiCreatedResponse,
     ApiHeader,
     ApiNoContentResponse,
+    ApiNotFoundResponse,
     ApiOperation,
     ApiPreconditionFailedResponse,
     ApiResponse,
@@ -174,7 +175,10 @@ export class FilmWriteController {
         required: true,
     })
     @ApiNoContentResponse({
-        description: 'Der Film wurde gelöscht oder war nicht vorhanden',
+        description: 'Der Film wurde gelöscht',
+    })
+    @ApiNotFoundResponse({
+        description: 'Der Film war nicht vorhanden',
     })
     async delete(
         @Param('id') id: number,
@@ -183,7 +187,10 @@ export class FilmWriteController {
         this.#logger.debug('delete: id=%s', id);
 
         try {
-            await this.#service.delete(id);
+            const deleteResult = await this.#service.delete(id);
+            if (!deleteResult) {
+                return res.sendStatus(HttpStatus.NOT_FOUND);
+            }
         } catch (err) {
             this.#logger.error('delete: error=%o', err);
             return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -200,9 +207,9 @@ export class FilmWriteController {
             vorname: filmDTO.regisseur?.vorname,
             nachname: filmDTO.regisseur?.nachname,
             geburtsdatum:
-                filmDTO.regisseur?.geburtsdatum === undefined
-                    ? undefined
-                    : new Date(filmDTO.regisseur.geburtsdatum as string),
+                typeof filmDTO.regisseur?.geburtsdatum === 'string'
+                    ? new Date(filmDTO.regisseur.geburtsdatum)
+                    : filmDTO.regisseur?.geburtsdatum,
         };
 
         const schauspielerListe = filmDTO.schauspieler?.map(
@@ -212,9 +219,12 @@ export class FilmWriteController {
                     version: undefined,
                     vorname: schauspielerDTO.vorname,
                     nachname: schauspielerDTO.nachname,
-                    geburtsdatum: schauspielerDTO.geburtsdatum,
+                    geburtsdatum:
+                        typeof schauspielerDTO.geburtsdatum === 'string'
+                            ? new Date(schauspielerDTO.geburtsdatum)
+                            : schauspielerDTO.geburtsdatum,
                     groesse: schauspielerDTO.groesse,
-                    sozialeMedien: undefined,
+                    sozialeMedien: schauspielerDTO.sozialeMedien,
                 };
                 return schauspieler;
             },
@@ -238,19 +248,15 @@ export class FilmWriteController {
     }
 
     #handleCreateError(err: CreateError, res: Response) {
-        switch (err.type) {
-            case 'MovieExists': {
-                return this.#handleMovieExists(err.id, res);
-            }
-
-            default: {
-                return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        //eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (err.type === 'MovieExists') {
+            return this.#handleMovieExists(err, res);
         }
+        return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    #handleMovieExists(id: number | undefined, res: Response): Response {
-        const msg = `Der Film mit der ID "${id}" existiert bereits.`;
+    #handleMovieExists(err: CreateError, res: Response): Response {
+        const msg = `Der Film '${err.titel}'(${err.erscheinungsjahr}) mit Spieldauer ${err.spieldauer} Minuten existiert bereits.`;
         this.#logger.debug('#handleMovieExists(): msg=%s', msg);
         return res
             .status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -296,3 +302,5 @@ export class FilmWriteController {
         }
     }
 }
+
+/* eslint-enable max-lines */

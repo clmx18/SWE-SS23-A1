@@ -23,11 +23,11 @@ export class Regisseur {
     @VersionColumn()
     readonly version: number | undefined;
 
-    @Column('varchar')
+    @Column('varchar', { length: 20 })
     @ApiProperty({ example: 'Quentin', type: String })
     readonly vorname: string | undefined;
 
-    @Column('varchar')
+    @Column('varchar', { length: 20 })
     @ApiProperty({ example: 'Tarantino', type: String })
     readonly nachname: string | undefined;
 

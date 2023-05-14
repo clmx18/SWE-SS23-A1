@@ -59,6 +59,7 @@ snyk-*.log
 .settings/
 .sonarlint
 *.sublime-workspace
+.vscode/
 
 # IDE - VSCode
 .vscode/*

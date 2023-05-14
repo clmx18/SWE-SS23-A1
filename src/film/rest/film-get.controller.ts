@@ -2,7 +2,7 @@
  * Das Modul besteht aus der Controller-Klasse für Lesen an der REST-Schnittstelle.
  * @packageDocumentation
  */
-
+/* eslint-disable max-lines */
 // eslint-disable-next-line max-classes-per-file
 import {
     ApiHeader,
@@ -31,7 +31,9 @@ import {
     type Suchkriterien,
 } from '../service/film-read.service.js';
 import { Request, Response } from 'express';
+import { Regisseur } from '../entity/regisseur.entity.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { Schauspieler } from '../entity/schauspieler.entity.js';
 import { getBaseUri } from './getBaseUri.js';
 import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
@@ -57,10 +59,14 @@ export interface Links {
 }
 
 /** Film-Objekt mit HATEOAS-Links */
+export type RegisseurModel = Omit<Regisseur, 'id' | 'version'>;
+export type SchauspielerModel = Omit<Schauspieler, 'id' | 'version'>;
 export type FilmModel = Omit<
     Film,
     'aktualisiert' | 'erzeugt' | 'id' | 'regisseur' | 'schauspieler' | 'version'
 > & {
+    regisseur: RegisseurModel | undefined;
+    schauspieler: SchauspielerModel[] | undefined;
     // eslint-disable-next-line @typescript-eslint/naming-convention
     _links: Links;
 };
@@ -94,10 +100,10 @@ export class FilmQuery implements Suchkriterien {
     declare readonly erscheinungsjahr: number;
 
     @ApiProperty({ required: false })
-    declare readonly javascript: boolean;
+    declare readonly mitRegisseur: boolean;
 
     @ApiProperty({ required: false })
-    declare readonly typescript: boolean;
+    declare readonly mitSchauspielern: boolean;
 }
 
 /**
@@ -138,7 +144,7 @@ export class FilmGetController {
     @ApiOperation({ summary: 'Suche mit der Film-ID', tags: ['Suchen'] })
     @ApiParam({
         name: 'id',
-        description: 'Z.B. 00000000-0000-0000-0000-000000000001',
+        description: 'Z.B. 1000',
     })
     @ApiHeader({
         name: 'If-None-Match',
@@ -187,6 +193,10 @@ export class FilmGetController {
         if (version === `"${versionDb}"`) {
             this.#logger.debug('findById: NOT_MODIFIED');
             return res.sendStatus(HttpStatus.NOT_MODIFIED);
+        }
+        if (version !== undefined && version !== `"${versionDb}"`) {
+            this.#logger.debug('findById: NOT_ACCEPTABLE');
+            return res.sendStatus(HttpStatus.NOT_ACCEPTABLE);
         }
         this.#logger.debug('findById: versionDb=%s', versionDb);
         res.header('ETag', `"${versionDb}"`);
@@ -257,10 +267,41 @@ export class FilmGetController {
             genre: film.genre,
             spieldauer: film.spieldauer,
             erscheinungsjahr: film.erscheinungsjahr,
+            regisseur: film.regisseur
+                ? this.#regisseurToModel(film.regisseur)
+                : undefined,
+            schauspieler: film.schauspieler
+                ? this.#schauspielerToModel(film.schauspieler)
+                : undefined,
             _links: links,
         };
         /* eslint-enable unicorn/consistent-destructuring */
 
         return filmModel;
     }
+
+    #regisseurToModel(regisseur: Regisseur) {
+        const regisseurModel: RegisseurModel = {
+            vorname: regisseur.vorname,
+            nachname: regisseur.nachname,
+            geburtsdatum: regisseur.geburtsdatum,
+            filme: regisseur.filme,
+        };
+        return regisseurModel;
+    }
+
+    #schauspielerToModel(schauspieler: Schauspieler[]) {
+        const schauspielerModel = schauspieler.map((actor) => {
+            const actorModel = {
+                vorname: actor.vorname,
+                nachname: actor.nachname,
+                geburtsdatum: actor.geburtsdatum,
+                groesse: actor.groesse,
+                sozialeMedien: actor.sozialeMedien,
+            };
+            return actorModel;
+        });
+        return schauspielerModel;
+    }
 }
+/*eslint-enable max-lines */

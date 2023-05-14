@@ -1,0 +1,21 @@
+{
+  "titel": "Interstellar",
+  "rating": 5,
+  "genre": "DRAMA",
+  "spieldauer": 169,
+  "erscheinungsjahr": 2014,
+  "regisseur": {
+    "vorname": "Christopher",
+    "nachname": "Nolan",
+    "geburtsdatum": "1970-07-30"
+  },
+  "schauspieler": [
+    {
+      "vorname": "Matthew",
+      "nachname": "McConaughey",
+      "geburtsdatum": "1969-11-04",
+      "groesse": 182,
+      "sozialeMedien": null
+    }
+  ]
+}

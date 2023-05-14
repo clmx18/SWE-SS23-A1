@@ -1,0 +1,31 @@
+{
+  "titel": "The Godfather",
+  "rating": 5,
+  "genre": "DRAMA",
+  "spieldauer": 176,
+  "erscheinungsjahr": 1972,
+  "regisseur": {
+    "vorname": "Francis Ford",
+    "nachname": "Coppola",
+    "geburtsdatum": "1939-04-07"
+  },
+  "schauspieler": [
+    {
+      "vorname": "Marlon",
+      "nachname": "Brando",
+      "geburtsdatum": "1924-04-03",
+      "groesse": 175,
+      "sozialeMedien": {
+        "twitter": "@marlonbrando",
+        "instagram": "@marlonbrando"
+      }
+    },
+    {
+      "vorname": "Al",
+      "nachname": "Pacino",
+      "geburtsdatum": "1940-04-25",
+      "groesse": 167,
+      "sozialeMedien": null
+    }
+  ]
+}
