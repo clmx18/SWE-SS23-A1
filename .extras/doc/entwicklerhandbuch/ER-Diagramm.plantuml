@@ -1,0 +1,68 @@
+' Copyright (C) 2019 - present Juergen Zimmermann, Hochschule Karlsruhe
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+' Preview durch <Alt>d
+
+@startuml ER Diagramm
+
+' hide the spot
+hide circle
+
+' evtl. Prbleme mit Kraehenfuessen vermeiden
+skinparam linetype ortho
+
+entity "Film" {
+  *id : integer <<generated>>
+  --
+  *version: integer
+  *titel: text
+  *genre: text
+  *rating: number
+  *spieldauer: number
+  *erscheinungsjahr: number
+  regisseur: text
+  schauspieler: text
+  *erzeugt: timestamp
+  *aktualisiert: timestamp
+}
+
+entity "Schauspieler" {
+  *id : integer <<generated>>
+  --
+  *version : text
+  vorname: text
+  nachname: text
+  geburtsdatum: date
+  groesse: number
+  *film_id : integer <<FK>>
+}
+
+entity "Regisseur" {
+  *id : integer <<generated>>
+  --
+  *version : text
+  vorname: text
+  nachname: text
+  geburtsdatum: date
+  filme: text
+  *film_id : integer <<FK>>
+}
+
+Film ||..|| Regisseur
+Film ||..o{ Schauspieler
+
+footer (c) Jürgen Zimmermann
+
+@enduml

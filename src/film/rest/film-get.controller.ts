@@ -208,7 +208,7 @@ export class FilmGetController {
     }
 
     /**
-     * Bücher werden mit Query-Parametern asynchron gesucht.
+     * Filme werden mit Query-Parametern asynchron gesucht.
      *
      * @param query Query-Parameter von Express.
      * @param req Request-Objekt von Express.
