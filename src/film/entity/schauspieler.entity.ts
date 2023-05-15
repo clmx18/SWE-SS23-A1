@@ -1,8 +1,9 @@
+import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
+
 /**
  * Das Modul enthält die Entity-Klasse 'Schauspieler'
  * @packageDocumentation
  */
-import { Column, Entity, PrimaryGeneratedColumn, VersionColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
@@ -26,7 +27,7 @@ export class Schauspieler {
 
     @Column('date')
     @ApiProperty({ example: '1963-03-27', type: Date })
-    readonly geburtsdatum: Date | undefined;
+    readonly geburtsdatum: Date | string | undefined;
 
     @Column('int')
     @ApiProperty({ example: 179, type: Number })

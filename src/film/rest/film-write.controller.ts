@@ -35,6 +35,7 @@ import { type Film } from '../entity/film.entity.js';
 import { FilmDTO } from './filmDTO.entity.js';
 import { FilmWriteService } from '../service/film-write.service.js';
 import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
+import { type Regisseur } from '../entity/regisseur.entity.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
 import { RolesGuard } from '../../security/auth/roles/roles.guard.js';
@@ -199,36 +200,36 @@ export class FilmWriteController {
     }
 
     #filmDtoToFilm(filmDTO: FilmDTO): Film {
-        let regisseur;
-        if (filmDTO.regisseur) {
-            const regisseurDTO = filmDTO.regisseur;
-            regisseur = {
-                id: undefined,
-                version: undefined,
-                vorname: regisseurDTO.vorname,
-                nachname: regisseurDTO.nachname,
-                geburtsdatum:
-                    typeof regisseurDTO.geburtsdatum === 'string'
-                        ? new Date(regisseurDTO.geburtsdatum)
-                        : regisseurDTO.geburtsdatum,
-                filme: undefined,
-            };
-        }
-        const schauspieler = filmDTO.schauspieler?.map((schauspielerDTO) => {
-            const actor: Schauspieler = {
-                id: undefined,
-                version: undefined,
-                vorname: schauspielerDTO.vorname,
-                nachname: schauspielerDTO.nachname,
-                geburtsdatum:
-                    typeof schauspielerDTO.geburtsdatum === 'string'
-                        ? new Date(schauspielerDTO.geburtsdatum)
-                        : schauspielerDTO.geburtsdatum,
-                groesse: schauspielerDTO.groesse,
-                sozialeMedien: schauspielerDTO.sozialeMedien,
-            };
-            return actor;
-        });
+        const regisseur: Regisseur = {
+            id: undefined,
+            version: undefined,
+            filme: undefined,
+            vorname: filmDTO.regisseur?.vorname,
+            nachname: filmDTO.regisseur?.nachname,
+            geburtsdatum:
+                typeof filmDTO.regisseur?.geburtsdatum === 'string'
+                    ? new Date(filmDTO.regisseur.geburtsdatum)
+                    : filmDTO.regisseur?.geburtsdatum,
+        };
+
+        const schauspielerListe = filmDTO.schauspieler?.map(
+            (schauspielerDTO) => {
+                const schauspieler: Schauspieler = {
+                    id: undefined,
+                    version: undefined,
+                    vorname: schauspielerDTO.vorname,
+                    nachname: schauspielerDTO.nachname,
+                    geburtsdatum:
+                        typeof schauspielerDTO.geburtsdatum === 'string'
+                            ? new Date(schauspielerDTO.geburtsdatum)
+                            : schauspielerDTO.geburtsdatum,
+                    groesse: schauspielerDTO.groesse,
+                    sozialeMedien: schauspielerDTO.sozialeMedien,
+                };
+                return schauspieler;
+            },
+        );
+
         const film = {
             id: undefined,
             version: undefined,
@@ -238,10 +239,11 @@ export class FilmWriteController {
             spieldauer: filmDTO.spieldauer,
             erscheinungsjahr: filmDTO.erscheinungsjahr,
             regisseur,
-            schauspieler,
+            schauspieler: schauspielerListe,
             erzeugt: undefined,
             aktualisiert: undefined,
         };
+
         return film;
     }
 
@@ -300,4 +302,5 @@ export class FilmWriteController {
         }
     }
 }
+
 /* eslint-enable max-lines */

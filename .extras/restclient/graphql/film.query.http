@@ -1,0 +1,113 @@
+// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+//
+// N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
+//
+
+// siehe auch https://studio.apollographql.com/sandbox/explorer
+
+### Suche id, version und titel von allen Filmen
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+{
+  filme {
+    id
+    version
+    titel
+  }
+}
+
+### Suche version, genre, titel und erschnungsjahr von einem Film mit vorhandener Film-ID
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID! = "1") {
+  film(id: $id) {
+    version
+    genre
+    titel
+    erscheinungsjahr
+  }
+}
+
+{
+  "id": "1"
+}
+
+### Suche titel von einem Film mit nicht-vorhandener Film-ID
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID! = "999999") {
+  film(id: $id) {
+    titel
+  }
+}
+
+{
+  "id": "999999"
+}
+
+### Suche genre von Filmen mit vorhandenem Titel
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($titel: String = "universal") {
+  filme(titel: $titel) {
+    genre
+  }
+}
+
+{
+  "titel": "universal"
+}
+
+### Suche genre, rating und erscheinungsjahr von Filmen mit vorhandenem Titel
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($titel: String = "abcde") {
+  filme(titel: $titel) {
+    genre
+    rating
+    erscheinungsjahr
+  }
+}
+
+{
+  "titel": "abcde"
+}
+
+### Suche regisseur von Filmen mit NICHT-vorhandenem Titel
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($titel: String = "Nichtvorhanden") {
+  filme(titel: $titel) {
+    regisseur
+  }
+}
+
+{
+  "titel": "Nichtvorhanden"
+}

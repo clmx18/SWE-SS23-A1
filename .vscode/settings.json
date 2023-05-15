@@ -1,0 +1,10 @@
+{
+    "rest-client.environmentVariables": {
+        "$shared": {}
+        ,
+        "local": {
+            "graphQlUrl": "https://localhost:3000/graphql",
+            "host": "localhost",
+        },
+    }
+}
