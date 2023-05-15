@@ -1,6 +1,6 @@
 id;version;vorname;nachname;geburtsdatum
-1000;0;Frank;Darabont;1959-01-28
-1001;0;Francis;Coppola;1939-04-07
-1002;0;Christopher;Nolan;1970-07-30
-1003;0;Quentin;Tarantino;1963-03-27
-1004;0;Peter;Jackson;1961-10-31
+1000;0;Frank;Darabont;"1959-01-28"
+1001;0;Francis;Coppola;"1939-04-07"
+1002;0;Christopher;Nolan;"1970-07-30"
+1003;0;Quentin;Tarantino;"1963-03-27"
+1004;0;Peter;Jackson;"1961-10-31"

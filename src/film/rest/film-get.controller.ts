@@ -172,12 +172,8 @@ export class FilmGetController {
 
         let film: Film | undefined;
         try {
-            // vgl. Kotlin: Aufruf einer suspend-Function
             film = await this.#service.findById({ id });
         } catch (err) {
-            // err ist implizit vom Typ "unknown", d.h. keine Operationen koennen ausgefuehrt werden
-            // Exception einer export async function bei der Ausfuehrung fangen:
-            // https://strongloop.com/strongblog/comparing-node-js-promises-trycatch-zone-js-angular
             this.#logger.error('findById: error=%o', err);
             return res.sendStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }
