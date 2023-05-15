@@ -1,6 +1,6 @@
 id;version;vorname;nachname;geburtsdatum;groesse;soziale_medien
-1000;0;Tom;Hanks;1956-07-09;183;"{""twitter"": ""@tomhanks"", ""instagram"": ""@tomhanks""}"
-1001;0;Marlon;Brando;1924-04-03;175;"{""twitter"": ""@marlonbrando"", ""instagram"": ""@marlonbrando""}"
-1002;0;Heath;Ledger;1979-04-04;180;"{""twitter"": ""@heathledger"", ""instagram"": ""@heathledger""}"
-1003;0;John;Travolta;1954-02-18;188;"{""twitter"": ""@johntravolta"", ""instagram"": ""@johntravolta""}"
-1004;0;Elijah;Wood;1981-01-28;168;"{""twitter"": ""@elijahwood"", ""instagram"": ""@elijahwood""}"
+1000;0;Tom;Hanks;"1956-07-09";183;"{""twitter"": ""@tomhanks"", ""instagram"": ""@tomhanks""}"
+1001;0;Marlon;Brando;"1924-04-03";175;"{""twitter"": ""@marlonbrando"", ""instagram"": ""@marlonbrando""}"
+1002;0;Heath;Ledger;"1979-04-04";180;"{""twitter"": ""@heathledger"", ""instagram"": ""@heathledger""}"
+1003;0;John;Travolta;"1954-02-18";188;"{""twitter"": ""@johntravolta"", ""instagram"": ""@johntravolta""}"
+1004;0;Elijah;Wood;"1981-01-28";168;"{""twitter"": ""@elijahwood"", ""instagram"": ""@elijahwood""}"
