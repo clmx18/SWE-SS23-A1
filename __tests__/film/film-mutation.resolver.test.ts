@@ -49,8 +49,6 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            id: 123,
-                            version: 123,
                             titel: "Interstellar",
                             genre: "DRAMA",
                             rating: 5,
@@ -106,8 +104,6 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            id: abc,
-                            version: abc,
                             titel: "SehrLangerGutUnüberlegterTitelDerAufJedenFallZuLangIst",
                             genre: "ROMCOM",
                             rating: 100,
@@ -175,8 +171,6 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     create(
                         input: {
-                            id: 111,
-                            version: 111,
                             titel: "Interstellar",
                             genre: "DRAMA",
                             rating: 5,
@@ -235,8 +229,6 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     update(
                         input: {
-                            id: 1001,
-                            version: 1,
                             titel: "The Godfather",
                             genre: "DRAMA",
                             rating: 5,
@@ -291,8 +283,6 @@ describe('GraphQL Mutations', () => {
                 mutation {
                     update(
                         input: {
-                            id: 1001,
-                            version: 1,
                             titel: "SehrLangerGutUnüberlegterTitelDerAufJedenFallZuLangIst",
                             genre: "ROMCOM",
                             rating: 100,
