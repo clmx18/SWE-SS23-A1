@@ -57,12 +57,15 @@ const neuerFilmInvalid: Record<string, unknown> = {
         },
     ],
 };
+const titel = 'The Godfather';
+const spieldauer = 175;
+const erscheinungsjahr = 1972;
 const neuerFilmExistiert: FilmDTO = {
-    titel: 'The Godfather',
+    titel,
     rating: 5,
     genre: 'DRAMA',
-    spieldauer: 175,
-    erscheinungsjahr: 1972,
+    spieldauer,
+    erscheinungsjahr,
     regisseur: {
         vorname: 'Francis Ford',
         nachname: 'Coppola',
@@ -181,7 +184,11 @@ describe('POST /rest', () => {
         const { status, data } = response;
 
         expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
-        expect(data).toEqual(expect.stringContaining('ISBN'));
+        expect(data).toEqual(
+            expect.stringContaining(
+                `Der Film '${titel}'(${erscheinungsjahr}) mit Spieldauer ${spieldauer} Minuten existiert bereits.`,
+            ),
+        );
     });
 
     test('Neuer Film, aber ohne Token', async () => {
@@ -216,6 +223,4 @@ describe('POST /rest', () => {
         expect(status).toBe(HttpStatus.FORBIDDEN);
         expect(data.statusCode).toBe(HttpStatus.FORBIDDEN);
     });
-
-    test.todo('Abgelaufener Token');
 });
