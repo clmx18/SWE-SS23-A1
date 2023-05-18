@@ -1,18 +1,3 @@
-// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 //
 // N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
 //
@@ -26,37 +11,7 @@ mutation {
   login(username: "admin", password: "p") { token expiresIn roles }
 }
 
-### Einloggen in der Rolle "mitarbeiter" und "kunde"
-// @name login
-POST {{graphQlUrl}}
-Content-Type: application/json
-X-REQUEST-TYPE: GraphQL
-
-mutation {
-  login(username: "mitarbeiter", password: "p") { token expiresIn roles }
-}
-
-### Einloggen in der Rolle "kunde"
-// @name login
-POST {{graphQlUrl}}
-Content-Type: application/json
-X-REQUEST-TYPE: GraphQL
-
-mutation {
-  login(username: "kunde", password: "p") { token expiresIn roles }
-}
-
-### Einloggen mit falschem Passwort
-// @name login
-POST {{graphQlUrl}}
-Content-Type: application/json
-X-REQUEST-TYPE: GraphQL
-
-mutation {
-  login(username: "admin", password: "FALSCH") { token expiresIn roles }
-}
-
-### Neues Film anlegen
+### Neuen Film anlegen
 POST {{graphQlUrl}}
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.data.login.token}}
@@ -65,15 +20,26 @@ X-REQUEST-TYPE: GraphQL
 mutation {
   create(
     input: {
-      id: 12345,
-      version: 123,
-      titel: "Titanic",
-      genre: "DRAMA",
-      rating: 95,
+      titel: "Titanic"
+      genre: DRAMA,
+      rating: 4,
       spieldauer: 189,
       erscheinungsjahr: 1997,
-      regisseur: "James Cameron",
-      schauspieler: "Kate Winslet"
+      regisseur: {
+        id: 1005,
+        version: 0,
+        vorname: "John",
+        nachname: "Doe",
+        geburtsdatum: "1961-10-31"
+      },
+      schauspieler: [{
+        id: 1000,
+        version:0,
+        vorname: "Jane",
+        nachname: "Doe",
+        geburtsdatum: "1956-07-09",
+        groesse: 180
+      }]
     }
   )
 }
@@ -87,15 +53,28 @@ X-REQUEST-TYPE: GraphQL
 mutation {
   create(
     input: {
-      id: abc,
-      version: def,
-      titel: "###",
-      genre: "COMEDY",
-      rating: -1,
-      spieldauer: 10000,
-      erscheinungsjahr: 3000,
-      regisseur: "nicht vorhanden",
-      schauspieler: "keine"
+      id: 12345,
+      version: 123,
+      titel: "Titanic",
+      genre: DRAMA,
+      rating: 99,
+      spieldauer: 189,
+      erscheinungsjahr: 1997,
+      regisseur: {
+        id: 1005,
+        version: 0,
+        vorname: "John",
+        nachname: "Doe",
+        geburtsdatum: "1961-10-31"
+      },
+      schauspieler: [{
+        id: 1000,
+        version:0,
+        vorname: "Jane",
+        nachname: "Doe",
+        geburtsdatum: "1956-07-09",
+        groesse: 180
+      }]
     }
   )
 }
@@ -109,15 +88,8 @@ X-REQUEST-TYPE: GraphQL
 mutation {
   update(
     input: {
-      id: 123456789,
-      version: 12345,
+      id: 12345,
       titel: "Titanic 2",
-      genre: "DRAMA",
-      rating: 15,
-      spieldauer: 90,
-      erscheinungsjahr: 2010,
-      regisseur: "Shane Van Dyke",
-      schauspieler: "Bruce Davison"
     }
   )
 }

@@ -27,8 +27,8 @@ const jestConfig: Config.InitialOptions = {
             },
         ],
     },
-
-    testRegex: '__tests__\\.*\\\\.*test\\.m?ts$',
+    //Use jest default https://jestjs.io/docs/configuration#testregex-string--arraystring
+    //testRegex: '__tests__\\.*\\\\.*test\\.m?ts$', //(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$
     collectCoverageFrom: ['<rootDir>/src/**/*.*ts'],
     // coverageDirectory: 'coverage',
     testEnvironment: 'node',

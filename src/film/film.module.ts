@@ -1,5 +1,7 @@
 import { AuthModule } from '../security/auth/auth.module.js';
 import { FilmGetController } from './rest/film-get.controller.js';
+import { FilmMutationResolver } from './graphql/film-mutation.resolver.js';
+import { FilmQueryResolver } from './graphql/film-query.resolver.js';
 import { FilmReadService } from './service/film-read.service.js';
 import { FilmWriteController } from './rest/film-write.controller.js';
 import { FilmWriteService } from './service/film-write.service.js';
@@ -22,7 +24,13 @@ import { entities } from './entity/entities.js';
     imports: [TypeOrmModule.forFeature(entities), AuthModule],
     controllers: [FilmGetController, FilmWriteController],
     // Provider sind z.B. Service-Klassen fuer DI
-    providers: [FilmReadService, FilmWriteService, QueryBuilder],
+    providers: [
+        FilmReadService,
+        FilmWriteService,
+        FilmQueryResolver,
+        FilmMutationResolver,
+        QueryBuilder,
+    ],
     // Export der Provider fuer DI in anderen Modulen
     exports: [FilmReadService, FilmWriteService],
 })
