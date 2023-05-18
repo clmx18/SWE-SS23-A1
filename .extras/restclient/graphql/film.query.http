@@ -1,18 +1,3 @@
-// Copyright (C) 2020 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 //
 // N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
 //
@@ -37,7 +22,7 @@ POST {{graphQlUrl}}
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
-query ($id: ID! = "1") {
+query ($id: ID! = "1000") {
   film(id: $id) {
     version
     genre
@@ -47,7 +32,7 @@ query ($id: ID! = "1") {
 }
 
 {
-  "id": "1"
+  "id": "1000"
 }
 
 ### Suche titel von einem Film mit nicht-vorhandener Film-ID
@@ -70,14 +55,14 @@ POST {{graphQlUrl}}
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
-query ($titel: String = "universal") {
+query ($titel: String = "Pulp Fiction") {
   filme(titel: $titel) {
     genre
   }
 }
 
 {
-  "titel": "universal"
+  "titel": "Pulp Fiction"
 }
 
 ### Suche genre, rating und erscheinungsjahr von Filmen mit vorhandenem Titel
@@ -85,7 +70,7 @@ POST {{graphQlUrl}}
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
-query ($titel: String = "abcde") {
+query ($titel: String = "Pulp Fiction") {
   filme(titel: $titel) {
     genre
     rating
@@ -94,7 +79,7 @@ query ($titel: String = "abcde") {
 }
 
 {
-  "titel": "abcde"
+  "titel": "Pulp Fiction"
 }
 
 ### Suche regisseur von Filmen mit NICHT-vorhandenem Titel
@@ -104,7 +89,10 @@ X-REQUEST-TYPE: GraphQL
 
 query ($titel: String = "Nichtvorhanden") {
   filme(titel: $titel) {
-    regisseur
+    regisseur {
+      vorname
+      nachname
+    }
   }
 }
 

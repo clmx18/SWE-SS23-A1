@@ -21,6 +21,7 @@ import { typeOrmModuleOptions } from './config/db.js';
         DevModule,
         AuthModule,
         FilmModule,
+        GraphQLModule.forRoot<ApolloDriverConfig>(graphQlModuleOptions),
         HealthModule,
         LoggerModule,
         TypeOrmModule.forRoot(typeOrmModuleOptions),

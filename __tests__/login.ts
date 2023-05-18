@@ -2,7 +2,7 @@ import { type AxiosInstance, type AxiosResponse } from 'axios';
 import {
     type GraphQLQuery,
     type GraphQLResponseBody,
-} from './film-query.resolver.test.js';
+} from './film/film-query.resolver.test.js';
 import { httpsAgent, loginPath } from './testserver.js';
 import { type LoginResult } from '../src/security/auth/service/auth.service.js';
 import dotenv from 'dotenv';

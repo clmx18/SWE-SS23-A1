@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
 // eslint-disable-next-line max-classes-per-file
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { CreateError, UpdateError } from '../service/errors.js';
@@ -175,7 +159,7 @@ export class FilmMutationResolver {
     #errorMsgCreateFilm(err: CreateError) {
         switch (err.type) {
             case 'MovieExists': {
-                return `Das Film ${err.id} existiert bereits`;
+                return `Der Film ${err.id} existiert bereits`;
             }
             default: {
                 return 'Unbekannter Fehler';
@@ -186,7 +170,7 @@ export class FilmMutationResolver {
     #errorMsgUpdateFilm(err: UpdateError) {
         switch (err.type) {
             case 'MovieDoesNotExist': {
-                return `Es gibt kein Film mit der ID ${err.id}`;
+                return `Es existiert kein Film mit der ID ${err.id}`;
             }
             case 'VersionInvalid': {
                 return `"${err.version}" ist keine gueltige Versionsnummer`;

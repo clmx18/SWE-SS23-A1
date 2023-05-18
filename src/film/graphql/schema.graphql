@@ -23,7 +23,6 @@ schema {
 "Funktionen, um Filmdaten zu lesen"
 type Query {
   filme(titel: String): [Film!]
-
   film(id: ID!): Film
 }
 
@@ -42,8 +41,13 @@ type Regisseur {
   version: Int!
   vorname: String!
   nachname: String!
-  geburtsdatum: Int!
-  filme: Film
+  geburtsdatum: String!
+}
+
+"Daten zu Sozialen Medien eines Schauspielers"
+type SozialeMedien {
+  twitter: String
+  instagram: String
 }
 
 "Daten zum Schauspieler eines Filmes"
@@ -52,25 +56,25 @@ type Schauspieler {
   version: Int!
   vorname: String!
   nachname: String!
-  geburtsdatum: Int!
-  groesse: Int
-  sozialeMedien: String
+  geburtsdatum: String!
+  groesse: Int!
+  sozialeMedien: SozialeMedien
 }
 
-"Datenschema zu einem Film, das gelesen wird"
+"Datenschema zu einem Film, der gelesen wird"
 type Film {
   id: ID!
   version: Int!
   titel: String!
-  rating: String
   genre: Genre!
-  spieldauer: Int
+  rating: Int!
+  spieldauer: Int!
   erscheinungsjahr: Int!
   regisseur: Regisseur!
-  schauspieler: [Schauspieler]!
+  schauspieler: [Schauspieler!]
 }
 
-"Enum-Typ für die Genre eines Filmes"
+"Genre-Typ für das Genre eines Filmes"
 enum Genre {
   ACTION
   ADVENTURE
@@ -80,36 +84,64 @@ enum Genre {
   CRIME
   DRAMA
   FANTASY
-  FILM-NOIR
+  "FILM-NOIR"
   HISTORY
   HORROR
   MYSTERY
   ROMANCE
-  SCI-FI
+  "SCI-FI"
   THRILLER
   WESTERN
 }
 
+"Daten zum Regisseur eines neuen Filmes"
+input RegisseurInput {
+  id: ID
+  version: Int
+  vorname: String
+  nachname: String
+  geburtsdatum: String
+}
+
+"Daten zu Sozialen Medien eines Schauspielers"
+input SozialeMedienInput {
+  twitter: String
+  instagram: String
+}
+
+"Daten zum Schauspieler eines neuen Filmes"
+input SchauspielerInput {
+  id: ID
+  version: Int
+  vorname: String
+  nachname: String
+  geburtsdatum: String
+  groesse: Int
+  sozialeMedien: SozialeMedienInput
+}
+
 "Daten für einen neuen Film"
 input FilmInput {
+  id: ID!
+  version: Int!
   titel: String!
-  rating: String
   genre: Genre!
-  spieldauer: Int
+  rating: Int!
+  spieldauer: Int!
   erscheinungsjahr: Int!
-  regisseur: Regisseur!
-  schauspieler: [Schauspieler]!
+  regisseur: RegisseurInput!
+  schauspieler: [SchauspielerInput!]
 }
 
 "Daten für einen zu ändernden Film"
 input FilmUpdateInput {
-  id: ID!
-  version: Int!
-  titel: String!
-  rating: String
-  genre: Genre!
+  id: ID
+  version: Int
+  titel: String
+  genre: Genre
+  rating: Int
   spieldauer: Int
-  erscheinungsjahr: Int!
-  regisseur: Regisseur!
-  schauspieler: [Schauspieler]!
+  erscheinungsjahr: Int
+  regisseur: RegisseurInput
+  schauspieler: [SchauspielerInput]
 }

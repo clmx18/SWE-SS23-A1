@@ -187,7 +187,8 @@ pipeline {
             steps {
               echo 'Docker-Image bauen: dockerd starten, pack installieren'
               // Docker-Installation und laufender Docker-Daemon erforderlich
-              sh 'docker build --tag swe-gruppe-1/film:2023.4.0 .'
+              //sh 'docker version'
+              //sh 'docker build --tag swe-gruppe-1/film:2023.4.0 .'
             }
         }
     }
