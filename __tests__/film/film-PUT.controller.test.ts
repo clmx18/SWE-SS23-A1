@@ -17,8 +17,8 @@ import { loginRest } from '../login.js';
 // -----------------------------------------------------------------------------
 const geaenderterFilm: FilmDTO = {
     titel: 'The Godfather',
-    rating: 5,
     genre: 'DRAMA',
+    rating: 5,
     spieldauer: 176,
     erscheinungsjahr: 1972,
     regisseur: {
@@ -51,8 +51,8 @@ const idVorhanden = '1001';
 
 const geaenderterFilmIdNichtVorhanden: FilmDTO = {
     titel: 'The Godfather',
-    rating: 5,
     genre: 'DRAMA',
+    rating: 5,
     spieldauer: 176,
     erscheinungsjahr: 1972,
     regisseur: {
@@ -84,8 +84,8 @@ const idNichtVorhanden = '999999';
 
 const geaenderterFilmInvalid: Record<string, unknown> = {
     titel: '123',
-    rating: 51,
     genre: 'ROMCOM',
+    rating: 51,
     spieldauer: -1,
     erscheinungsjahr: -1,
     regisseur: {
@@ -106,8 +106,8 @@ const geaenderterFilmInvalid: Record<string, unknown> = {
 
 const veralterFilm: FilmDTO = {
     titel: 'The Godfather',
-    rating: 5,
     genre: 'DRAMA',
+    rating: 5,
     spieldauer: 176,
     erscheinungsjahr: 1972,
     regisseur: {
@@ -215,8 +215,8 @@ describe('PUT /rest/:id', () => {
         headers['If-Match'] = '"0"';
         const expectedMsg = [
             expect.stringMatching(/^titel /u),
-            expect.stringMatching(/^rating /u),
             expect.stringMatching(/^genre /u),
+            expect.stringMatching(/^rating /u),
             expect.stringMatching(/^spieldauer /u),
             expect.stringMatching(/^erscheinungsjahr /u),
             expect.stringMatching(/^regisseur.regisseur /u),

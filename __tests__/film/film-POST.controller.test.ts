@@ -17,8 +17,8 @@ import { loginRest } from '../login.js';
 // -----------------------------------------------------------------------------
 const neuerFilm: FilmDTO = {
     titel: 'Interstellar',
-    rating: 5,
     genre: 'DRAMA',
+    rating: 5,
     spieldauer: 169,
     erscheinungsjahr: 2014,
     regisseur: {
@@ -32,14 +32,17 @@ const neuerFilm: FilmDTO = {
             nachname: 'McConaughey',
             geburtsdatum: '1969-11-04',
             groesse: 182,
-            sozialeMedien: undefined,
+            sozialeMedien: {
+                twitter: '@matthewM',
+                instagram: '@matthewM',
+            },
         },
     ],
 };
 const neuerFilmInvalid: Record<string, unknown> = {
     titel: 'SehrLangerGutUnüberlegterTitelDerAufJedenFallZuLangIst',
-    rating: 6,
     genre: 'ROMCOM',
+    rating: 6,
     spieldauer: -1,
     erscheinungsjahr: -1,
     regisseur: {
@@ -53,7 +56,10 @@ const neuerFilmInvalid: Record<string, unknown> = {
             nachname: 'McConaughey',
             geburtsdatum: '1969-11-04',
             groesse: -1,
-            sozialeMedien: undefined,
+            sozialeMedien: {
+                twitter: '@matthewM',
+                instagram: '@matthewM',
+            },
         },
     ],
 };
@@ -62,8 +68,8 @@ const spieldauer = 175;
 const erscheinungsjahr = 1972;
 const neuerFilmExistiert: FilmDTO = {
     titel,
-    rating: 5,
     genre: 'DRAMA',
+    rating: 5,
     spieldauer,
     erscheinungsjahr,
     regisseur: {
@@ -140,8 +146,8 @@ describe('POST /rest', () => {
         headers.Authorization = `Bearer ${token}`;
         const expectedMsg = [
             expect.stringMatching(/^titel /u),
-            expect.stringMatching(/^rating /u),
             expect.stringMatching(/^genre /u),
+            expect.stringMatching(/^rating /u),
             expect.stringMatching(/^spieldauer /u),
             expect.stringMatching(/^erscheinungsjahr /u),
             expect.stringMatching(/^regisseur.regisseur /u),
