@@ -2,7 +2,7 @@
 import {
     type GraphQLQuery,
     type GraphQLResponseBody,
-} from '../../film-query.resolver.test.js';
+} from '../../film/film-query.resolver.test.js';
 import { afterAll, beforeAll, describe, test } from '@jest/globals';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import {
