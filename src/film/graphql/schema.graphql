@@ -1,0 +1,147 @@
+# Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# siehe app.module.ts
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"Funktionen, um Filmdaten zu lesen"
+type Query {
+  filme(titel: String): [Film!]
+  film(id: ID!): Film
+}
+
+"Funktionen, um Filme neu anzulegen, zu aktualisieren oder zu löschen"
+type Mutation {
+  create(input: FilmInput!): String
+
+  update(input: FilmUpdateInput!): Int
+
+  delete(id: ID!): Boolean
+}
+
+"Daten zum Regisseur eines Filmes"
+type Regisseur {
+  id: ID!
+  version: Int!
+  vorname: String!
+  nachname: String!
+  geburtsdatum: String!
+}
+
+"Daten zu Sozialen Medien eines Schauspielers"
+type SozialeMedien {
+  twitter: String
+  instagram: String
+}
+
+"Daten zum Schauspieler eines Filmes"
+type Schauspieler {
+  id: ID!
+  version: Int!
+  vorname: String!
+  nachname: String!
+  geburtsdatum: String!
+  groesse: Int!
+  sozialeMedien: SozialeMedien
+}
+
+"Datenschema zu einem Film, der gelesen wird"
+type Film {
+  id: ID!
+  version: Int!
+  titel: String!
+  genre: Genre!
+  rating: Int!
+  spieldauer: Int!
+  erscheinungsjahr: Int!
+  regisseur: Regisseur!
+  schauspieler: [Schauspieler!]
+}
+
+"Genre-Typ für das Genre eines Filmes"
+enum Genre {
+  ACTION
+  ADVENTURE
+  ANIMATION
+  BIOGRAPHY
+  COMEDY
+  CRIME
+  DRAMA
+  FANTASY
+  "FILM-NOIR"
+  HISTORY
+  HORROR
+  MYSTERY
+  ROMANCE
+  "SCI-FI"
+  THRILLER
+  WESTERN
+}
+
+"Daten zum Regisseur eines neuen Filmes"
+input RegisseurInput {
+  id: ID
+  version: Int
+  vorname: String
+  nachname: String
+  geburtsdatum: String
+}
+
+"Daten zu Sozialen Medien eines Schauspielers"
+input SozialeMedienInput {
+  twitter: String
+  instagram: String
+}
+
+"Daten zum Schauspieler eines neuen Filmes"
+input SchauspielerInput {
+  id: ID
+  version: Int
+  vorname: String
+  nachname: String
+  geburtsdatum: String
+  groesse: Int
+  sozialeMedien: SozialeMedienInput
+}
+
+"Daten für einen neuen Film"
+input FilmInput {
+  id: ID!
+  version: Int!
+  titel: String!
+  genre: Genre!
+  rating: Int!
+  spieldauer: Int!
+  erscheinungsjahr: Int!
+  regisseur: RegisseurInput!
+  schauspieler: [SchauspielerInput!]
+}
+
+"Daten für einen zu ändernden Film"
+input FilmUpdateInput {
+  id: ID
+  version: Int
+  titel: String
+  genre: Genre
+  rating: Int
+  spieldauer: Int
+  erscheinungsjahr: Int
+  regisseur: RegisseurInput
+  schauspieler: [SchauspielerInput]
+}
