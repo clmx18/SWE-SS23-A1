@@ -22,7 +22,7 @@ export type GraphQLResponseBody = Pick<GraphQLResponse, 'data' | 'errors'>;
 // -----------------------------------------------------------------------------
 const idVorhanden = '1001';
 
-const titelVorhanden = 'The Godfather';
+const titelVorhanden = 'Pulp Fiction';
 
 const titelNichtVorhanden = 'Toy Story';
 
@@ -131,7 +131,7 @@ describe('GraphQL Queries', () => {
             query: `
                 {
                     filme(titel: "${titelVorhanden}") {
-                        genre
+                        titel
                     }
                 }
             `,
@@ -171,7 +171,7 @@ describe('GraphQL Queries', () => {
             query: `
                 {
                     filme(titel: "${titelNichtVorhanden}") {
-                        regisseur
+                        titel
                     }
                 }
             `,
