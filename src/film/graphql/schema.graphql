@@ -30,7 +30,7 @@ type Query {
 type Mutation {
   create(input: FilmInput!): String
 
-  update(input: FilmUpdateInput!): Int
+  update(input: FilmUpdateInput): Int
 
   delete(id: ID!): Boolean
 }
@@ -122,15 +122,15 @@ input SchauspielerInput {
 
 "Daten für einen neuen Film"
 input FilmInput {
-  id: ID!
-  version: Int!
-  titel: String!
-  genre: Genre!
-  rating: Int!
-  spieldauer: Int!
-  erscheinungsjahr: Int!
-  regisseur: RegisseurInput!
-  schauspieler: [SchauspielerInput!]
+  id: ID
+  version: Int
+  titel: String
+  genre: Genre
+  rating: Int
+  spieldauer: Int
+  erscheinungsjahr: Int
+  regisseur: RegisseurInput
+  schauspieler: [SchauspielerInput]
 }
 
 "Daten für einen zu ändernden Film"

@@ -1,7 +1,7 @@
 //
 // N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
 //
-### Einloggen in der Rolle "admin", "mitarbeiter" und "kunde"
+### Einloggen in der Rolle "admin"
 // @name login
 POST {{graphQlUrl}}
 Content-Type: application/json
@@ -20,22 +20,21 @@ X-REQUEST-TYPE: GraphQL
 mutation {
   create(
     input: {
-      id: 1001,
-      version: 12345,
+      id: 1006,
       titel: "Titanic",
       genre: DRAMA,
       rating: 4,
       spieldauer: 189,
       erscheinungsjahr: 1997,
       regisseur: {
-        id: 1005,
+        id: 1008,
         version: 0,
         vorname: "John",
         nachname: "Doe",
         geburtsdatum: "1961-10-31"
       },
       schauspieler: [{
-        id: 1000,
+        id: 1010,
         version:0,
         vorname: "Jane",
         nachname: "Doe",
@@ -56,7 +55,6 @@ mutation {
   create(
     input: {
       id: 12345,
-      version: 123,
       titel: "Titanic",
       genre: DRAMA,
       rating: -1,
@@ -79,86 +77,4 @@ mutation {
       }]
     }
   )
-}
-
-### Vorhandenes Film aktualisieren
-POST {{graphQlUrl}}
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.$.data.login.token}}
-X-REQUEST-TYPE: GraphQL
-
-mutation {
-  update(
-    input: {
-      id: 12345,
-      titel: "Titanic 2",
-    }
-  )
-}
-
-### Vorhandenes Film mit ungueltigen Werten aktualisieren
-POST {{graphQlUrl}}
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.$.data.login.token}}
-X-REQUEST-TYPE: GraphQL
-
-mutation {
-  update(
-    input: {
-      id: abcde,
-      version: defghi,
-      titel: "###",
-      genre: "COMEDY",
-      rating: -1,
-      spieldauer: 10000,
-      erscheinungsjahr: 3000,
-      regisseur: "nicht vorhanden",
-      schauspieler: "keine"
-    }
-  )
-}
-
-### Nicht-Vorhandenes Film aktualisieren
-POST {{graphQlUrl}}
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.$.data.login.token}}
-X-REQUEST-TYPE: GraphQL
-
-mutation {
-  update(
-    input: {
-      id: 987,
-      version: 3456,
-      titel: "Brooklyn",
-      genre: ROMANCE,
-      rating: 3,
-      spieldauer: 111,
-      erscheinungsjahr: 2015,
-      regisseur: {
-        id: 1008,
-        version: 0,
-        vorname: "John",
-        nachname: "Crowley",
-        geburtsdatum: "1961-10-31"
-      },
-      schauspieler: [{
-        id: 1020,
-        version:0,
-        vorname: "Saoirse",
-        nachname: "Ronan",
-        geburtsdatum: "1994-04-12",
-        groesse: 168
-      }]
-    }
-  )
-}
-
-### Vorhandenes Film loeschen
-POST {{graphQlUrl}}
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.$.data.login.token}}
-X-REQUEST-TYPE: GraphQL
-
-mutation {
-  delete(id: "abcde")
 }

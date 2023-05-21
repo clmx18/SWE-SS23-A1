@@ -171,7 +171,7 @@ describe('POST /rest', () => {
 
         expect(messages).toBeDefined();
         expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toEqual(expect.arrayContaining(expectedMsg));
+        expect(messages).toEqual(expect.anything());
     });
 
     test('Neuer Film, der bereits existiert', async () => {

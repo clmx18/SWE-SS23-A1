@@ -18,10 +18,10 @@ import {
 } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { Genre } from '../entity/film.entity.js';
 import { RegisseurDTO } from './regisseurDTO.entity.js';
 import { SchauspielerDTO } from './schauspielerDTO.entity.js';
+import { Type } from 'class-transformer';
 
 export const MAX_RATING = 5;
 

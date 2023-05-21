@@ -38,4 +38,14 @@ const jwtPemDist = join(configDist, 'jwt');
 mkdirSync(jwtPemDist, { recursive: true });
 copySync(jwtPemSrc, jwtPemDist);
 
-//TODO Add copy actions für GraphQL!
+// GraphQL-Schema kopieren
+const businessDir = 'film'
+const graphqlSrc = join(src, businessDir, 'graphql');
+const graphqlDist = join(dist, src, businessDir, 'graphql');
+mkdirSync(graphqlDist, { recursive: true });
+copyFileSync(join(graphqlSrc, 'schema.graphql'), join(graphqlDist, 'schema.graphql'));
+
+const graphqlAuthSrc = join(src, 'security', 'auth');
+const graphqlAuthDist = join(dist, src, 'security', 'auth');
+mkdirSync(graphqlAuthDist, { recursive: true });
+copyFileSync(join(graphqlAuthSrc, 'login.graphql'), join(graphqlAuthDist, 'login.graphql'));

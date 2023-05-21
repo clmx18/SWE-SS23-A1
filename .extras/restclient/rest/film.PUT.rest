@@ -20,7 +20,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.token}}
 If-Match: "0"
 
-< .\json\film-put.json
+< ./json/film-put.json
 ###
 
 // NICHT-Vorhandenen Film aktualisieren
@@ -29,7 +29,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.token}}
 If-Match: "0"
 
-< .\json\film-put.json
+< ./json/film-put.json
 ###
 
 // Vorhandenen Film ohne Versionsnummer aktualisieren
@@ -37,7 +37,7 @@ PUT {{restUrl}}/1001
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.token}}
 
-< .\json\film-put.json
+< ./json/film-put.json
 ###
 
 // Vorhandenen Film mit falscher Versionsnummer aktualisieren
@@ -46,7 +46,7 @@ Content-Type: application/json
 If-Match: 0
 Authorization: Bearer {{login.response.body.$.token}}
 
-< .\json\film-put.json
+< ./json/film-put.json
 ###
 
 // Vorhandenen Film mit alter Versionsnummer aktualisieren
@@ -55,7 +55,7 @@ Content-Type: application/json
 If-Match: "-1"
 Authorization: Bearer {{login.response.body.$.token}}
 
-< .\json\film-put.json
+< ./json/film-put.json
 ###
 
 // Vorhandenen Film mit ungueltigen Daten aktualisieren
@@ -64,5 +64,5 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.token}}
 If-Match: "0"
 
-< .\json\film-put-invalid.json
+< ./json/film-put-invalid.json
 ###

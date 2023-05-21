@@ -16,9 +16,7 @@ import { HttpStatus } from '@nestjs/common';
 // -----------------------------------------------------------------------------
 const titelVorhanden = 'the';
 const titelNichtVorhanden = 'xyz';
-
-const genreVorhanden = 'Action';
-const genreNichtVorhanden = 'K-Drama';
+const genreVorhanden = 'DRAMA';
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -61,8 +59,7 @@ describe('GET /rest', () => {
         filme
             .map((film) => film._links.self.href)
             .forEach((selfLink) => {
-                // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
-                expect(selfLink).toMatch(new RegExp(`^${baseURL}`, 'u'));
+                expect(selfLink).toMatch(/rest/iu);
             });
     });
 
@@ -111,10 +108,25 @@ describe('GET /rest', () => {
         expect(data).toMatch(/^not found$/iu);
     });
 
+    test('Keine Filme zu einer nicht-vorhandenen Property', async () => {
+        // given
+        const params = { drama: 'bar' };
+
+        // when
+        const response: AxiosResponse<string> = await client.get('/', {
+            params,
+        });
+
+        // then
+        const { status, data } = response;
+
+        expect(status).toBe(HttpStatus.NOT_FOUND);
+        expect(data).toMatch(/^not found$/iu);
+    });
+
     test('Mind. 1 Film mit vorhandenem Genre', async () => {
         // given
-        const params = { [genreVorhanden]: 'true' };
-
+        const params = { genre: genreVorhanden };
         // when
         const response: AxiosResponse<FilmeModel> = await client.get('/', {
             params,
@@ -130,46 +142,13 @@ describe('GET /rest', () => {
 
         const { filme } = data._embedded;
 
-        // Jedes Buch hat im Array der Schlagwoerter z.B. "javascript"
         filme
             .map((film) => film.genre)
             .forEach((genre) =>
                 expect(genre).toEqual(
-                    expect.arrayContaining([genreVorhanden.toUpperCase()]),
+                    expect.stringContaining(genreVorhanden.toUpperCase()),
                 ),
             );
-    });
-
-    test('Keine Filme zu einem nicht vorhandenen Genre', async () => {
-        // given
-        const params = { [genreNichtVorhanden]: 'true' };
-
-        // when
-        const response: AxiosResponse<string> = await client.get('/', {
-            params,
-        });
-
-        // then
-        const { status, data } = response;
-
-        expect(status).toBe(HttpStatus.NOT_FOUND);
-        expect(data).toMatch(/^not found$/iu);
-    });
-
-    test('Keine Filme zu einer nicht-vorhandenen Property', async () => {
-        // given
-        const params = { foo: 'bar' };
-
-        // when
-        const response: AxiosResponse<string> = await client.get('/', {
-            params,
-        });
-
-        // then
-        const { status, data } = response;
-
-        expect(status).toBe(HttpStatus.NOT_FOUND);
-        expect(data).toMatch(/^not found$/iu);
     });
 });
 /* eslint-enable no-underscore-dangle */

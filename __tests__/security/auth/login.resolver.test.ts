@@ -123,7 +123,7 @@ describe('Login', () => {
         const error = errors![0]!;
         const { message, path, extensions } = error;
 
-        expect(message).toBe('Falscher Benutzername oder falsches Passwort');
+        expect(message).toBe('Ungültiger Benutzername oder falsches Passwort!');
         expect(path).toBeDefined();
         expect(path!![0]).toBe('login');
         expect(extensions).toBeDefined();
